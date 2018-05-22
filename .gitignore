@@ -1,0 +1,6 @@
+/bin
+/.irb-history
+/.bash_history
+/.bundle
+.DS_Store
+/vendor
