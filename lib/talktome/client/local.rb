@@ -2,16 +2,18 @@ module Talktome
   class Client
     class Local < Client
 
-      def initialize(folder)
+      def initialize(folder, options = {})
         raise ArgumentError, "Missing messages folder" unless folder
         raise ArgumentError, "Invalid messages folder" unless Path(folder).directory?
         @folder = folder
+        @options = options
         super()
       end
-      attr_reader :folder
+      attr_reader :folder, :options
 
       def talktome(message, user, tpldata, strategies)
         message, handler = load_message!(message, strategies)
+        options[:debugger].call(message, user, handler, tpldata) if options[:debugger]
         handler.send_message message, user, tpldata
       end
 
@@ -22,7 +24,7 @@ module Talktome
         raise InvalidMessageError, "No such message `#{identifier}`"            unless folder.exists?
         raise InvalidMessageError, "Message `#{identifier}` should be a folder" unless folder.directory?
         strategies.each do |s|
-          if (file = folder.glob("#{s}.*").first).file?
+          if (file = folder.glob("#{s}.*").first) && file.file?
             message = Message.new(file)
             handler = get_handler(s)
             return [ message, handler ]
