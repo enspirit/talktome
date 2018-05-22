@@ -10,7 +10,7 @@ module Talktome
       let(:path) { Path.dir/'with-frontmatter.md' }
 
       it 'works as expected' do
-        expect(subject.template_content).to eql("<p>Hello {{who}} <a href=\"{{url}}\">test</a></p>\n")
+        expect(subject.template_content).to eql("Hello {{who}} [test]({{url}})\n")
         expect(subject.metadata).to eql("hello" => "World")
       end
     end
@@ -19,7 +19,7 @@ module Talktome
       let(:path) { Path.dir/'without-frontmatter.md' }
 
       it 'works as expected' do
-        expect(subject.template_content).to eql("<p>Hello {{who}}</p>\n")
+        expect(subject.template_content).to eql("Hello {{who}}\n")
         expect(subject.metadata).to eql({})
       end
     end

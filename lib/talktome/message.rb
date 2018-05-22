@@ -13,6 +13,7 @@ module Talktome
     def instantiate(tpldata)
       self.dup do |m|
         m.template_content = i(m.template_content, tpldata)
+        m.template_content = compile_body(m.template_content)
         m.metadata = {}
         self.metadata.each_pair do |k, v|
           m.metadata[k] = i(v, tpldata)
@@ -39,19 +40,16 @@ module Talktome
     def compile
       raw = path.read
       if raw =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
-        @metadata, @template_content = YAML::load($1), compile_body($')
+        @metadata, @template_content = YAML::load($1), $'
       else
-        @metadata, @template_content = {}, compile_body(raw)
+        @metadata, @template_content = {}, raw
       end
     end
 
     def compile_body(body)
       case extension
       when 'md'
-        Talktome.redcarpet
-          .render(body)
-          .gsub(/%7B%7B/, '{{')
-          .gsub(/%7D%7D/, '}}')
+        Talktome.redcarpet.render(body)
       else
         body
       end
