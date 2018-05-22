@@ -38,7 +38,7 @@ module Talktome
     end
 
     def compile
-      raw = path.read
+      raw = path.read.force_encoding(Encoding::UTF_8)
       if raw =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
         @metadata, @template_content = YAML::load($1), $'
       else
