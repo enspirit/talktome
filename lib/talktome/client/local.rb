@@ -41,7 +41,7 @@ module Talktome
         return nil unless tpl_folder = options[:templates]
         ->(message, src, ctype) {
           if (file = tpl_folder/"#{strategy}.#{ctype}").file?
-            data = message.metadata.merge(yield: src)
+            data = { metadata: message.metadata, yield: src }
             Mustache.render(file.read, data)
           else
             src

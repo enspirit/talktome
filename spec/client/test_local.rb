@@ -51,7 +51,7 @@ module Talktome
         it 'sends email when requested' do
           client.talktome("welcome", user, tpldata, [:email])
           expect(strategy.last.message).not_to be_nil
-          expect(strategy.last.message.to_html).to eql("<html><body><h1>Hello Test user</h1>\n\n<p>Welcome to this email example!</p>\n</body></html>\n")
+          expect(strategy.last.message.to_html).to eql("<html><title>Hello Test user</title><body><h1>Hello Test user</h1>\n\n<p>Welcome to this email example!</p>\n</body></html>\n")
         end
       end
 
