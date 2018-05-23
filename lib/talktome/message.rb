@@ -1,8 +1,9 @@
 module Talktome
   class Message
 
-    def initialize(path)
+    def initialize(path, options = {})
       @path = path
+      @options = options
       compile
     end
     attr_accessor :path
@@ -12,12 +13,11 @@ module Talktome
 
     def instantiate(tpldata)
       self.dup do |m|
-        m.template_content = i(m.template_content, tpldata)
-        m.template_content = compile_body(m.template_content)
         m.metadata = {}
         self.metadata.each_pair do |k, v|
           m.metadata[k] = i(v, tpldata)
         end
+        m.template_content = i(m.template_content, tpldata.merge(metadata: m.metadata))
       end
     end
 
@@ -31,7 +31,28 @@ module Talktome
       path.ext.to_s
     end
 
+    def to_text
+      template_it(self.template_content, :text)
+    end
+
+    def to_html
+      case extension
+      when 'md'
+        template_it(Talktome.redcarpet.render(self.template_content), :html)
+      else
+        template_it(self.template_content, :html)
+      end
+    end
+
   private
+
+    def template_it(src, ctype)
+      if @options[:templater]
+        @options[:templater].call(self, src, ctype)
+      else
+        src
+      end
+    end
 
     def i(tpl, tpldata)
       Mustache.render(tpl, tpldata)
@@ -43,15 +64,6 @@ module Talktome
         @metadata, @template_content = YAML::load($1), $'
       else
         @metadata, @template_content = {}, raw
-      end
-    end
-
-    def compile_body(body)
-      case extension
-      when 'md'
-        Talktome.redcarpet.render(body)
-      else
-        body
       end
     end
 

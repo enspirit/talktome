@@ -13,8 +13,9 @@ module Talktome
 
       def talktome(message, user, tpldata, strategies)
         message, handler = load_message!(message, strategies)
-        options[:debugger].call(message, user, handler, tpldata) if options[:debugger]
-        handler.send_message message, user, tpldata
+        message = message.instantiate(tpldata)
+        options[:debugger].call(message, user, handler) if options[:debugger]
+        handler.send_message message, user
       end
 
     protected
@@ -25,13 +26,27 @@ module Talktome
         raise InvalidMessageError, "Message `#{identifier}` should be a folder" unless folder.directory?
         strategies.each do |s|
           if (file = folder.glob("#{s}.*").first) && file.file?
-            message = Message.new(file)
             handler = get_handler(s)
+            options = {}
+            options[:templater] = templater(s)
+            message = Message.new(file, options)
             return [ message, handler ]
           end
         end
         files = folder.glob("*").map{|f| f.basename.to_s }
         raise InvalidMessageError, "No available strategy for `#{identifier}`\n#{files.inspect} vs. #{strategies.inspect}"
+      end
+
+      def templater(strategy)
+        return nil unless tpl_folder = options[:templates]
+        ->(message, src, ctype) {
+          if (file = tpl_folder/"#{strategy}.#{ctype}").file?
+            data = message.metadata.merge(yield: src)
+            Mustache.render(file.read, data)
+          else
+            src
+          end
+        }
       end
 
     end # class Client
