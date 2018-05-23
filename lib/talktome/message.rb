@@ -10,7 +10,7 @@ module Talktome
     attr_accessor :metadata
     attr_accessor :data
     attr_accessor :template_content
-    protected :path=, :metadata=, :template_content=
+    protected :path=, :metadata=, :data=, :template_content=
 
     def instantiate(tpldata)
       self.dup do |m|
@@ -48,6 +48,19 @@ module Talktome
 
   private
 
+    class Template < Mustache
+
+      def partial(name)
+        path = "#{@options[:template_path]}/#{name}.#{template_extension}"
+        File.read(path).force_encoding(Encoding::UTF_8)
+      end
+
+      def raise_on_context_miss?
+        true
+      end
+
+    end
+
     def template_it(src, ctype)
       if @options[:templater]
         @options[:templater].call(self, src, ctype)
@@ -57,7 +70,10 @@ module Talktome
     end
 
     def i(tpl, tpldata)
-      Mustache.render(tpl, tpldata)
+      Template.new({
+        template_file: self.path,
+        template_path: self.path.parent
+      }).render(tpl, tpldata)
     end
 
     def compile
