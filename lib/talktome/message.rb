@@ -8,6 +8,7 @@ module Talktome
     end
     attr_accessor :path
     attr_accessor :metadata
+    attr_accessor :data
     attr_accessor :template_content
     protected :path=, :metadata=, :template_content=
 
@@ -18,6 +19,7 @@ module Talktome
           m.metadata[k] = i(v, tpldata)
         end
         m.template_content = i(m.template_content, tpldata.merge(metadata: m.metadata))
+        m.data = tpldata
       end
     end
 
