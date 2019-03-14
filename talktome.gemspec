@@ -1,10 +1,11 @@
 $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
 require 'talktome/version'
+require 'date'
 
 Gem::Specification.new do |s|
   s.name        = 'talktome'
   s.version     = Talktome::VERSION
-  s.date        = '2017-08-01'
+  s.date        = Date.today.to_s
   s.summary     = "Talktome helps you talk to users by email, messaging, sms, etc."
   s.description = "Talktome helps you talk to users by email, messaging, sms, etc. It abstracts the messaging mechanisms and lets you manage message templates easily."
   s.authors     = ["Bernard Lambeau"]
@@ -16,7 +17,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rake", "~> 10"
   s.add_development_dependency "rspec", "~> 3.6"
 
-  s.add_runtime_dependency 'path', '~> 1.3'
+  s.add_runtime_dependency 'path', '>= 1.3'
   s.add_runtime_dependency 'mail', '~> 2', '>= 2.6.6'
   s.add_runtime_dependency 'mustache', '~> 1', '>= 1.0.5'
   s.add_runtime_dependency 'redcarpet', '~> 3', '>= 3.4'
