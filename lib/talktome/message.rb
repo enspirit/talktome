@@ -30,7 +30,7 @@ module Talktome
     end
 
     def extension
-      path.ext.to_s
+      path.ext.to_s.gsub(/^\./,"")
     end
 
     def to_text

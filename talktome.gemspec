@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'path', '>= 1.3'
   s.add_runtime_dependency 'mail', '~> 2', '>= 2.6.6'
-  s.add_runtime_dependency 'mustache', '~> 1', '>= 1.0.5'
-  s.add_runtime_dependency 'redcarpet', '~> 3', '>= 3.4'
+  s.add_runtime_dependency 'mustache', '~> 1'
+  s.add_runtime_dependency 'redcarpet','~> 3'
 end
