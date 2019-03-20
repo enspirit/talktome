@@ -1,5 +1,9 @@
 module Talktome
   class Client
+    #
+    # Builds a local client, that applies strategies synchronously and runs
+    # locally
+    #
     class Local < Client
 
       def initialize(folder, options = {})
@@ -10,12 +14,11 @@ module Talktome
         super()
       end
       attr_reader :folder, :options
-
-      def talktome(message, user, tpldata, strategies)
+      def talktome(message, user, tpldata, strategies, &callback)
         message, handler = load_message!(message, strategies)
         message = message.instantiate(tpldata)
         options[:debugger].call(message, user, handler) if options[:debugger]
-        handler.send_message message, user
+        handler.send_message message, user, &callback
       end
 
     protected

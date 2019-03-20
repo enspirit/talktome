@@ -14,6 +14,8 @@ module Talktome
           message: message,
           user: user
         })
+        yield(@last) if block_given?
+        @last
       end
 
     end # class Debug

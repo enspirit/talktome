@@ -53,6 +53,14 @@ module Talktome
           expect(strategy.last.message).not_to be_nil
           expect(strategy.last.message.to_html).to eql("<html><title>Hello Test user</title><body><h1>Hello Test user</h1>\n\n<p>Welcome to this email example!</p>\n\n<h3>Test user</h3>\n</body></html>\n")
         end
+
+        it 'yields the callback with the email' do
+          seen = nil
+          client.talktome("welcome", user, tpldata, [:email]){|m|
+            seen = m
+          }
+          expect(seen).not_to be_nil
+        end
       end
 
     end

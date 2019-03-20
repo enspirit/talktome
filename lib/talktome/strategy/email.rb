@@ -30,6 +30,8 @@ module Talktome
           raise "Unsupported extension `#{message.extension}`"
         end
 
+        yield(mail) if block_given?
+
         mail.deliver!
       end
 
