@@ -1,4 +1,4 @@
-# 0.2.0
+# 0.2.0 - 2019/03/20
 
 * Weaken non-critical dependencies (mustache, path, redcarpet) to avoid unnecessary
   integration issues.
