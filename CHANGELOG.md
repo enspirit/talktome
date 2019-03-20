@@ -7,6 +7,9 @@
   concrete message asset. The Email strategy for instance yields a Mail instance.
   This provides a chance to fix a few details on sending.
 
+* Clients can now be instantiated without options, default options will be
+  infered from environment variables.
+
 # 0.1.0 - A long time ago
 
 Birthday

@@ -6,14 +6,6 @@ module Talktome
     #
     class Local < Client
 
-      def initialize(folder, options = {})
-        raise ArgumentError, "Missing messages folder" unless folder
-        raise ArgumentError, "Invalid messages folder" unless Path(folder).directory?
-        @folder = folder
-        @options = options
-        super()
-      end
-      attr_reader :folder, :options
       def talktome(message, user, tpldata, strategies, &callback)
         message, handler = load_message!(message, strategies)
         message = message.instantiate(tpldata)
