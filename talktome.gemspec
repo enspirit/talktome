@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://github.com/enspirit/talktome'
   s.license     = 'MIT'
 
-  s.add_development_dependency "rake", "~> 10"
-  s.add_development_dependency "rspec", "~> 3.6"
+  s.add_development_dependency "rake", "~> 12"
+  s.add_development_dependency "rspec", "~> 3.7"
 
   s.add_runtime_dependency 'path', '>= 1.3'
   s.add_runtime_dependency 'mail', '~> 2', '>= 2.6.6'
