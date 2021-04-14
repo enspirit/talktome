@@ -4,6 +4,9 @@ require 'mustache'
 require 'redcarpet'
 module Talktome
 
+  # Root folder of the project structure
+  ROOT_FOLDER = Path.backfind('.[Gemfile]') or raise("Missing Gemfile")
+
   def redcarpet
     @redcarpet ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
   end
@@ -65,3 +68,4 @@ require 'talktome/error'
 require 'talktome/strategy'
 require 'talktome/message'
 require 'talktome/client'
+require 'talktome/app'

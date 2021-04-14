@@ -45,3 +45,6 @@ Gemfile.lock: Gemfile
 
 up: Dockerfile.built
 	docker run --rm -p 80:4567 $(IMAGE)
+
+test:
+	docker run --rm -e TALKTOME_EMAIL_DEFAULT_FROM=from@talktome.com $(IMAGE) bundle exec rake test
