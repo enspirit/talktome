@@ -5,3 +5,8 @@
 .DS_Store
 /vendor
 Gemfile.lock
+/.env
+/Dockerfile.built
+/Dockerfile.log
+/Dockerfile.pushed
+/pkg

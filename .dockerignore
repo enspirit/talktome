@@ -1,0 +1,7 @@
+/Dockerfile.built
+/Dockerfile.log
+/Dockerfile.pushed
+/pkg
+/.travis.yml
+/.git
+/Gemfile.lock
