@@ -42,5 +42,22 @@ module Talktome
 
     end
 
+    context 'POST /customer-support/' do
+
+      it 'works' do
+        post "/customer-support/", {
+          email: 'help@example.com',
+          message: 'Please help me',
+          object: 'The object',
+          kind: 'Kind',
+          info: {
+            version: '1.0.1',
+            page: 'homepage'
+          }
+        }.to_json, { "CONTENT_TYPE" => "application/json" }
+        expect(last_response).to be_ok
+      end
+    end
+
   end
 end
