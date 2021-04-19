@@ -43,10 +43,11 @@ module Talktome
 
     email_config.merge!({
       address:   ENV['TALKTOME_SMTP_ADDRESS'],
-      port:      ENV['TALKTOME_SMTP_PORT'],
+      port:      ENV['TALKTOME_SMTP_PORT'].to_i,
       domain:    ENV['TALKTOME_SMTP_DOMAIN'],
       user_name: ENV['TALKTOME_SMTP_USER'],
-      password:  ENV['TALKTOME_SMTP_PASSWORD']
+      password:  ENV['TALKTOME_SMTP_PASSWORD'],
+      enable_starttls_auto: (ENV['TALKTOME_SMTP_STARTTLS_AUTO'] != 'false')
     }) if email_delivery == :smtp
 
     email_config.merge!({
