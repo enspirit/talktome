@@ -3,6 +3,9 @@ require 'sinatra'
 module Talktome
   class App < Sinatra::Application
 
+    set :raise_errors, true
+    set :show_exceptions, false
+
     post '/contact-us/' do
       begin
         body = request.body.read
