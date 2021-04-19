@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'finitio'
 
 module Talktome
   class App < Sinatra::Application
@@ -6,53 +7,47 @@ module Talktome
     set :raise_errors, true
     set :show_exceptions, false
 
-    post '/contact-us/' do
-      begin
-        body = request.body.read
-        info = JSON.parse(body)
-        raise ::Talktome::InvalidEmailError unless info['email'] && info['email'] =~ /^[^@]+@[^@]+$/
-        # `confirmEmail` is a honeypot field, if it's filled it means it's a bot and an error is thrown
-        raise ::Talktome::InvalidEmailError if info['confirmEmail'] && info['confirmEmail'] =~ /^[^@]+@[^@]+$/
-        user = {
-          email: info['email']
-        }
-        data = {
-          email: info['email'],
-          message: info['message'] || ''
-        }
+    VALIDATION_SCHEMA = ::Finitio.system(<<~FIO)
+      @import finitio/data
+      {
+        email : String(s | s =~ /^[^@]+@[^@]+$/ )
+        ...   : .Object
+      }
+    FIO
 
-        TALKTOME = Talktome::Client::Local.new(ROOT_FOLDER/'mail-templates')
-        TALKTOME.talktome('contact-us', user, data, [:email])
+    TALKTOME = Talktome::Client::Local.new(ROOT_FOLDER/'mail-templates')
+
+    post %r{/([a-z-]+)/} do |action|
+      begin
+        user = {
+          email: info[:email]
+        }
+        TALKTOME.talktome(action, user, info, [:email])
         [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
-      rescue JSON::ParserError, ::Talktome::InvalidEmailError => ex
-        [ 400, { "Content-Type" => "text/plain"}, ["Invalid email address"] ]
+      rescue JSON::ParserError
+        fail!("Invalid data")
+      rescue Finitio::Error => ex
+        fail!(ex.message)
+      rescue ::Talktome::InvalidEmailError => ex
+        fail!("Invalid email address")
       end
     end
 
-    post '/customer-support/' do
-      begin
-        body = request.body.read
-        info = JSON.parse(body)
-        raise ::Talktome::InvalidEmailError unless info['email'] && info['email'] =~ /^[^@]+@[^@]+$/
-        # `confirmEmail` is a honeypot field, if it's filled it means it's a bot and an error is thrown
-        raise ::Talktome::InvalidEmailError if info['confirmEmail'] && info['confirmEmail'] =~ /^[^@]+@[^@]+$/
-        user = {
-          email: info['email']
-        }
-        data = {
-          email: info['email'],
-          message: info['message'],
-          object: info['object'],
-          kind: info['kind'],
-          info: info['info']
-        }
+  private
 
-        TALKTOME = Talktome::Client::Local.new(ROOT_FOLDER/'mail-templates')
-        TALKTOME.talktome('customer-support', user, data, [:email])
-        [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
-      rescue JSON::ParserError, ::Talktome::InvalidEmailError => ex
-        [ 400, { "Content-Type" => "text/plain"}, ["Invalid email address"] ]
-      end
+    def info
+      @info ||= VALIDATION_SCHEMA.dress(JSON.parse(request.body.read)).tap{|info|
+        not_a_robot!(info)
+      }
+    end
+
+    def fail!(message)
+      [ 400, { "Content-Type" => "text/plain"}, [message] ]
+    end
+
+    def not_a_robot!(info)
+      # `confirmEmail` is a honeypot field, if it's filled it means it's a bot and an error is thrown
+      raise ::Talktome::InvalidEmailError if info[:confirmEmail] && info[:confirmEmail] =~ /^[^@]+@[^@]+$/
     end
 
   end
