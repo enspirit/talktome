@@ -6,7 +6,9 @@ pipeline {
   }
 
   environment {
+    VERSION = get_docker_tag()
     SLACK_CHANNEL = '#opensource-cicd'
+    DOCKER_REGISTRY = 'docker.io'
   }
 
   stages {
@@ -36,11 +38,14 @@ pipeline {
     stage ('Pushing Docker Images') {
       when {
         branch 'master'
+        buildingTag()
       }
       steps {
         container('builder') {
           script {
-            sh 'make push-image'
+            docker.withRegistry('', 'dockerhub-credentials') {
+              sh 'make push-image'
+            }
           }
         }
       }
@@ -55,4 +60,11 @@ pipeline {
       sendNotifications('FAILED', SLACK_CHANNEL)
     }
   }
+}
+
+def get_docker_tag() {
+  if (env.TAG_NAME != null) {
+    return env.TAG_NAME
+  }
+  return 'latest'
 }

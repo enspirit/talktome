@@ -10,7 +10,14 @@ DOCKER_REGISTRY := $(or ${DOCKER_REGISTRY},${DOCKER_REGISTRY},docker.io)
 -include .env
 
 # Specify which docker tag is to be used
-DOCKER_TAG := $(or ${DOCKER_TAG},${DOCKER_TAG},latest)
+VERSION := $(or ${VERSION},${VERSION},latest)
+DOCKER_REGISTRY := $(or ${DOCKER_REGISTRY},${DOCKER_REGISTRY},docker.io)
+
+TINY = ${VERSION}
+MINOR = $(shell echo '${TINY}' | cut -f'1-2' -d'.')
+MAJOR = $(shell echo '${MINOR}' | cut -f'1-2' -d'.')
+
+$(info $(TINY) $(MINOR) $(MAJOR))
 
 ################################################################################
 ### Main docker rules
@@ -29,8 +36,12 @@ Dockerfile.pushed: Dockerfile.built
 		echo "No private registry defined, ignoring. (set DOCKER_REGISTRY or place it in .env file)"; \
 		return 1; \
 	fi
-	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):$(DOCKER_TAG)
-	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(DOCKER_TAG) | tee -a Dockerfile.log
+	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):$(VERSION)
+	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(VERSION) | tee -a Dockerfile.log
+	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):${MINOR}
+	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(MINOR) | tee -a Dockerfile.log
+	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):${MAJOR}
+	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(MAJOR) | tee -a Dockerfile.log
 	touch Dockerfile.pushed
 
 image: Dockerfile.built
