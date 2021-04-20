@@ -81,6 +81,27 @@ FROM enspirit/talktome
 COPY ./templates /app/templates
 ```
 
+## Configuring Talktome
+
+The easiest way to configure Talktome is through environment variables. The following
+ones are supported:
+
+```
+TALKTOME_DEBUG                   when set enables the dumping of sent messages to ./tmp folder
+
+TALKTOME_EMAIL_DELIVERY          smtp, file or test (see ruby Mail library)
+TALKTOME_EMAIL_DEFAULT_FROM      default From: to use for email sending
+TALKTOME_EMAIL_DEFAULT_REPLYTO   default Reply-To: to use for email sending
+TALKTOME_EMAIL_DEFAULT_TO        default To: to use for email sending
+
+TALKTOME_SMTP_ADDRESS            host address for smtp sending
+TALKTOME_SMTP_PORT               port of smtp server to use
+TALKTOME_SMTP_DOMAIN             sending domain
+TALKTOME_SMTP_USER               user for smtp authentication
+TALKTOME_SMTP_PASSWORD           password for smtp authentication
+TALKTOME_SMTP_STARTTLS_AUTO      true or false (see ruby Mail library)
+```
+
 ## Hacking Talktome
 
 In pure Ruby:

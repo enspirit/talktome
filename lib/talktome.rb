@@ -36,22 +36,7 @@ module Talktome
   end
   module_function :redcarpet
 
-  #
   # Infer all client and strategy options from environment variables.
-  # The following ones are recognized:
-  #
-  # - TALKTOME_DEBUG: when set (to anything) enables the dumping of sent
-  #   messages to the debug folder
-  # - TALKTOME_EMAIL_DELIVERY: "smtp", "file" or "test"
-  # - TALKTOME_EMAIL_DEFAULT_FROM: default From address to use for email sending
-  # - TALKTOME_EMAIL_DEFAULT_REPLYTO: default ReplyTo address to use for email sending
-  # - TALKTOME_EMAIL_DEFAULT_TO: default To address to use for email sending
-  # - TALKTOME_SMTP_ADDRESS: host address for smtp sending
-  # - TALKTOME_SMTP_PORT: port of smtp server to use
-  # - TALKTOME_SMTP_DOMAIN: sending domain
-  # - TALKTOME_SMTP_USER: user for smtp authentication
-  # - TALKTOME_SMTP_PASSWORD: user for smtp authentication
-  #
   def auto_options(folder)
     options = {}
     debug_folder = folder/"tmp"
