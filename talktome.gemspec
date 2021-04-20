@@ -24,4 +24,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'redcarpet','~> 3'
   s.add_runtime_dependency 'sinatra', '>= 2.0', '< 3.0'
   s.add_runtime_dependency "finitio", "~> 0.8.0"
+  s.add_runtime_dependency 'rack-robustness', '~> 1.1'
 end

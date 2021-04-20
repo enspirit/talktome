@@ -1,8 +1,15 @@
 require 'sinatra'
 require 'finitio'
-
+require 'rack/robustness'
 module Talktome
   class App < Sinatra::Application
+
+    use Rack::Robustness do |g|
+      g.catch_all
+      g.status 500
+      g.content_type 'text/plain'
+      g.body{ "An error occured." }
+    end
 
     set :raise_errors, true
     set :show_exceptions, false
