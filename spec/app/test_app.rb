@@ -18,7 +18,7 @@ module Talktome
 
       it 'works' do
         post "/contact-us/", {
-          email: 'hello@visitor.com',
+          reply_to: 'hello@visitor.com',
           message: 'Hello from visitor'
         }.to_json, { "CONTENT_TYPE" => "application/json" }
         expect(last_response).to be_ok
@@ -30,7 +30,7 @@ module Talktome
 
       it 'detects invalid emails' do
         post "/contact-us/", {
-          email: 'helloatvisitor.com',
+          reply_to: 'helloatvisitor.com',
           message: 'Hello from visitor'
         }.to_json, { "CONTENT_TYPE" => "application/json" }
         expect(last_response.status).to eql(400)
@@ -45,9 +45,9 @@ module Talktome
 
       it "detects stupid bots at least" do
         post "/contact-us/", {
-          email: 'hello@visitor.com',
+          reply_to: 'hello@visitor.com',
           message: 'Hello from visitor',
-          confirmEmail: 'hello@visitor.com'
+          reply_to_confirm: 'hello@visitor.com'
         }.to_json, { "CONTENT_TYPE" => "application/json" }
         expect(last_response.status).to eql(400)
         expect(Mail::TestMailer.deliveries.length).to eql(0)
@@ -56,13 +56,18 @@ module Talktome
     end
 
     context 'POST /contact-us/, regarding the Reply-To' do
+      class ::Talktome::Message::Template
+        def raise_on_context_miss?
+          false
+        end
+      end
+
       around(:each) do |bl|
         Talktome.set_env('TALKTOME_EMAIL_DEFAULT_REPLYTO', "replyto@talktome.com", &bl)
       end
 
       it 'takes the default value from environment if set' do
         post "/contact-us/", {
-          email: 'hello@visitor.com',
           message: 'Hello from visitor'
         }.to_json, { "CONTENT_TYPE" => "application/json" }
         expect(last_response).to be_ok
@@ -72,7 +77,6 @@ module Talktome
 
       it "lets override it by passing a replyTo field" do
         post "/contact-us/", {
-          email: 'hello@visitor.com',
           reply_to: 'hello@visitor.com',
           message: 'Hello from visitor'
         }.to_json, { "CONTENT_TYPE" => "application/json" }

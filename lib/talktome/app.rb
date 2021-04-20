@@ -11,7 +11,6 @@ module Talktome
       @import finitio/data
       Email = String(s | s =~ /^[^@]+@[^@]+$/ )
       {
-        email    :? Email
         reply_to :? Email
         ...      :  .Object
       }
@@ -47,8 +46,8 @@ module Talktome
     end
 
     def not_a_robot!(info)
-      # `confirmEmail` is a honeypot field, if it's filled it means it's a bot and an error is thrown
-      raise ::Talktome::InvalidEmailError if info[:confirmEmail] && info[:confirmEmail] =~ /^[^@]+@[^@]+$/
+      # `reply_to_confirm` is a honeypot field, if it's filled it means it's a bot and an error is thrown
+      raise ::Talktome::InvalidEmailError if info[:reply_to_confirm] && info[:reply_to_confirm] =~ /^[^@]+@[^@]+$/
     end
 
   end # class App

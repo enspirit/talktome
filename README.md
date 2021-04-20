@@ -48,6 +48,9 @@ exposing a way to send SPAM easily.
 
 ### Overriding templates (and having more than one endpoint)
 
+The default image comes with a single contact-us email template used by Enspirit.
+Feel free to override it by providing one or more email templates.
+
 You can mount a volume with email templates into `/app/templates/`, which will
 be used for the available endpoints. For instance, the following `templates/`
 folder will expose two endpoints with possibly different behaviors (according
