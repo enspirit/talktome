@@ -10,8 +10,8 @@ module Talktome
     VALIDATION_SCHEMA = ::Finitio.system(<<~FIO)
       @import finitio/data
       {
-        email : String(s | s =~ /^[^@]+@[^@]+$/ )
-        ...   : .Object
+        email :? String(s | s =~ /^[^@]+@[^@]+$/ )
+        ...   :  .Object
       }
     FIO
 
@@ -19,10 +19,7 @@ module Talktome
 
     post %r{/([a-z-]+)/} do |action|
       begin
-        user = {
-          email: info[:email]
-        }
-        TALKTOME.talktome(action, user, info, [:email])
+        TALKTOME.talktome(action, {}, info, [:email])
         [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
       rescue JSON::ParserError
         fail!("Invalid data")
@@ -50,5 +47,5 @@ module Talktome
       raise ::Talktome::InvalidEmailError if info[:confirmEmail] && info[:confirmEmail] =~ /^[^@]+@[^@]+$/
     end
 
-  end
+  end # class App
 end # module Talktome

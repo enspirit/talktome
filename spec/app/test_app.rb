@@ -9,6 +9,7 @@ module Talktome
     }
 
     before(:each) do
+      ENV['TALKTOME_EMAIL_DEFAULT_TO'] = "to@talktome.com"
       ENV['TALKTOME_EMAIL_DEFAULT_FROM'] = "from@talktome.com"
       Mail::TestMailer.deliveries.clear
     end
@@ -22,8 +23,8 @@ module Talktome
         }.to_json, { "CONTENT_TYPE" => "application/json" }
         expect(last_response).to be_ok
         expect(Mail::TestMailer.deliveries.length).to eql(1)
+        expect(Mail::TestMailer.deliveries.first.to).to eql(["to@talktome.com"])
         expect(Mail::TestMailer.deliveries.first.from).to eql(["from@talktome.com"])
-        expect(Mail::TestMailer.deliveries.first.to).to eql(["hello@visitor.com"])
         expect(Mail::TestMailer.deliveries.first.subject).to eql("Someone wants to reach you!")
       end
 
@@ -56,7 +57,7 @@ module Talktome
 
     context 'POST /contact-us/, with a default Reply-To' do
       around(:each) do |bl|
-        Talktome.set_env('TALKTOME_EMAIL_DEFAULT_REPLYTO', "info@talktome.com", &bl)
+        Talktome.set_env('TALKTOME_EMAIL_DEFAULT_REPLYTO', "replyto@talktome.com", &bl)
       end
 
       it 'works' do
@@ -66,7 +67,7 @@ module Talktome
         }.to_json, { "CONTENT_TYPE" => "application/json" }
         expect(last_response).to be_ok
         expect(Mail::TestMailer.deliveries.length).to eql(1)
-        expect(Mail::TestMailer.deliveries.first.reply_to).to eql(["info@talktome.com"])
+        expect(Mail::TestMailer.deliveries.first.reply_to).to eql(["replyto@talktome.com"])
       end
     end
 

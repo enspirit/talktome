@@ -43,7 +43,9 @@ module Talktome
   # - TALKTOME_DEBUG: when set (to anything) enables the dumping of sent
   #   messages to the debug folder
   # - TALKTOME_EMAIL_DELIVERY: "smtp", "file" or "test"
-  # - TALKTOME_EMAIL_DEFAULT_FROM: default from address to use for email sending
+  # - TALKTOME_EMAIL_DEFAULT_FROM: default From address to use for email sending
+  # - TALKTOME_EMAIL_DEFAULT_REPLYTO: default ReplyTo address to use for email sending
+  # - TALKTOME_EMAIL_DEFAULT_TO: default To address to use for email sending
   # - TALKTOME_SMTP_ADDRESS: host address for smtp sending
   # - TALKTOME_SMTP_PORT: port of smtp server to use
   # - TALKTOME_SMTP_DOMAIN: sending domain
@@ -82,6 +84,9 @@ module Talktome
       email.delivery_method(email_delivery, email_config)
       with_env('TALKTOME_EMAIL_DEFAULT_FROM'){|default|
         email.from(default)
+      }
+      with_env('TALKTOME_EMAIL_DEFAULT_TO'){|default|
+        email.to(default)
       }
       with_env('TALKTOME_EMAIL_DEFAULT_REPLYTO'){|default|
         email.reply_to(default)

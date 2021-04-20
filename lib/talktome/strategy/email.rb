@@ -9,10 +9,23 @@ module Talktome
       end
 
       def send_message(message, user)
+        # Take a base email, with all info coming from the environment (if set)
         mail = base_email
-        mail.to = user[:email]
-        mail.reply_to = message.metadata["reply_to"] if message.metadata.has_key?("reply_to")
-        mail.subject  = message.metadata["subject"]
+
+        # Override environment defaults with template behavior, for flexibility
+        [
+          :to,
+          :reply_to,
+          :subject
+        ].each do |which|
+          if arg = message.metadata[which.to_s]
+            mail.send(:"#{which}=", arg)
+          end
+        end
+
+        # If the user is actually known from source code behavior, override the
+        # `mail.to` to send the email to that particular person.
+        mail.to = user[:email] if user.has_key?(:email)
 
         case message.extension
         when 'md', 'html', 'htm'
