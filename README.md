@@ -38,10 +38,12 @@ docker run \
 
 Send an contact-us email through the web api using curl, as follows:
 
+```
 curl -XPOST \
      -H'Content-Type: application/json' \
      -d'{"reply_to": "someone@foo.bar", "message": "Hello"}'
      http://127.0.0.1:4567/contact-us/
+```
 
 This web API does not allow specifying `from` and `to` as input data to avoid
 exposing a way to send SPAM easily.
