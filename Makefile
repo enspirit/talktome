@@ -15,7 +15,7 @@ DOCKER_REGISTRY := $(or ${DOCKER_REGISTRY},${DOCKER_REGISTRY},docker.io)
 
 TINY = ${VERSION}
 MINOR = $(shell echo '${TINY}' | cut -f'1-2' -d'.')
-MAJOR = $(shell echo '${MINOR}' | cut -f'1-2' -d'.')
+MAJOR = $(shell echo '${MINOR}' | cut -f'1' -d'.')
 
 $(info $(TINY) $(MINOR) $(MAJOR))
 
