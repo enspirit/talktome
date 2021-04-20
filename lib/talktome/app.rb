@@ -17,7 +17,7 @@ module Talktome
       }
     FIO
 
-    TALKTOME = Talktome::Client::Local.new(ROOT_FOLDER/'mail-templates')
+    TALKTOME = Talktome::Client::Local.new(ROOT_FOLDER/'templates')
 
     post %r{/([a-z-]+)/} do |action|
       begin

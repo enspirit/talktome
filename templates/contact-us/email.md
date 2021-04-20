@@ -6,7 +6,7 @@ Hello,
 
 This person is trying to reach you:
 
-* Email: {{email}}
+* Email: {{reply_to}}
 * Message: {{message}}
 
 Truly yours,  
