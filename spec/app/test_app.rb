@@ -60,7 +60,6 @@ module Talktome
       end
 
       it 'works' do
-        puts ENV['TALKTOME_EMAIL_DEFAULT_REPLYTO'].inspect
         post "/contact-us/", {
           email: 'hello@visitor.com',
           message: 'Hello from visitor'
