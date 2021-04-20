@@ -55,12 +55,12 @@ module Talktome
 
     end
 
-    context 'POST /contact-us/, with a default Reply-To' do
+    context 'POST /contact-us/, regarding the Reply-To' do
       around(:each) do |bl|
         Talktome.set_env('TALKTOME_EMAIL_DEFAULT_REPLYTO', "replyto@talktome.com", &bl)
       end
 
-      it 'works' do
+      it 'takes the default value from environment if set' do
         post "/contact-us/", {
           email: 'hello@visitor.com',
           message: 'Hello from visitor'
@@ -68,6 +68,17 @@ module Talktome
         expect(last_response).to be_ok
         expect(Mail::TestMailer.deliveries.length).to eql(1)
         expect(Mail::TestMailer.deliveries.first.reply_to).to eql(["replyto@talktome.com"])
+      end
+
+      it "lets override it by passing a replyTo field" do
+        post "/contact-us/", {
+          email: 'hello@visitor.com',
+          reply_to: 'hello@visitor.com',
+          message: 'Hello from visitor'
+        }.to_json, { "CONTENT_TYPE" => "application/json" }
+        expect(last_response).to be_ok
+        expect(Mail::TestMailer.deliveries.length).to eql(1)
+        expect(Mail::TestMailer.deliveries.first.reply_to).to eql(["hello@visitor.com"])
       end
     end
 

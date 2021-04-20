@@ -9,9 +9,11 @@ module Talktome
 
     VALIDATION_SCHEMA = ::Finitio.system(<<~FIO)
       @import finitio/data
+      Email = String(s | s =~ /^[^@]+@[^@]+$/ )
       {
-        email :? String(s | s =~ /^[^@]+@[^@]+$/ )
-        ...   :  .Object
+        email    :? Email
+        reply_to :? Email
+        ...      :  .Object
       }
     FIO
 
@@ -19,7 +21,9 @@ module Talktome
 
     post %r{/([a-z-]+)/} do |action|
       begin
-        TALKTOME.talktome(action, {}, info, [:email])
+        TALKTOME.talktome(action, {}, info, [:email]){|email|
+          email.reply_to = info[:reply_to] if info.has_key?(:reply_to)
+        }
         [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
       rescue JSON::ParserError
         fail!("Invalid data")
