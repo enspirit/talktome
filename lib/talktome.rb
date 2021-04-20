@@ -7,6 +7,30 @@ module Talktome
   # Root folder of the project structure
   ROOT_FOLDER = Path.backfind('.[Gemfile]') or raise("Missing Gemfile")
 
+  def env(which, default = nil)
+    if ENV.has_key?(which)
+      got = ENV[which].to_s.strip
+      return got unless got.empty?
+    end
+    default
+  end
+  module_function :env
+
+  def with_env(which, &bl)
+    env(which).tap{|x|
+      bl.call(x) unless x.nil?
+    }
+  end
+  module_function :with_env
+
+  def set_env(which, value, &bl)
+    old, ENV[which] = ENV[which], value
+    bl.call.tap{
+      ENV[which] = old unless old.nil?
+    }
+  end
+  module_function :set_env
+
   def redcarpet
     @redcarpet ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
   end
@@ -56,7 +80,12 @@ module Talktome
 
     options[:strategies][:email] = ::Talktome::Strategy::Email.new{|email|
       email.delivery_method(email_delivery, email_config)
-      email.from(ENV['TALKTOME_EMAIL_DEFAULT_FROM']) if ENV['TALKTOME_EMAIL_DEFAULT_FROM']
+      with_env('TALKTOME_EMAIL_DEFAULT_FROM'){|default|
+        email.from(default)
+      }
+      with_env('TALKTOME_EMAIL_DEFAULT_REPLYTO'){|default|
+        email.reply_to(default)
+      }
     }
 
     options
