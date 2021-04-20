@@ -35,7 +35,7 @@ pipeline {
       }
     }
 
-    stage ('Pushing Docker Images') {
+    stage ('Pushing Docker Main Version Image') {
       when {
         anyOf {
           branch 'master'
@@ -47,6 +47,21 @@ pipeline {
           script {
             docker.withRegistry('', 'dockerhub-credentials') {
               sh 'make push-image'
+            }
+          }
+        }
+      }
+    }
+
+    stage ('Pushing Docker Tag Images') {
+      when {
+        buildingTag()
+      }
+      steps {
+        container('builder') {
+          script {
+            docker.withRegistry('', 'dockerhub-credentials') {
+              sh 'make push-tags'
             }
           }
         }

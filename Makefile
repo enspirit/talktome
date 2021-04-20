@@ -31,21 +31,26 @@ Dockerfile.built: Dockerfile $(shell git ls-files)
 	docker build -t $(IMAGE) . | tee Dockerfile.log
 	touch Dockerfile.built
 
-Dockerfile.pushed: Dockerfile.built
+image: Dockerfile.built
+
+Dockerfile.version.pushed: Dockerfile.built
 	@if [ -z "$(DOCKER_REGISTRY)" ]; then \
 		echo "No private registry defined, ignoring. (set DOCKER_REGISTRY or place it in .env file)"; \
 		return 1; \
 	fi
 	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):$(VERSION)
 	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(VERSION) | tee -a Dockerfile.log
+	touch Dockerfile.version.pushed
+
+Dockerfile.tags.pushed: Dockerfile.version.pushed
 	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):${MINOR}
 	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(MINOR) | tee -a Dockerfile.log
 	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):${MAJOR}
 	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(MAJOR) | tee -a Dockerfile.log
-	touch Dockerfile.pushed
+	touch Dockerfile.tags.pushed
 
-image: Dockerfile.built
-push-image: Dockerfile.pushed
+push-image: Dockerfile.version.pushed
+push-tags: Dockerfile.tags.pushed
 
 ################################################################################
 ### Main development rules
