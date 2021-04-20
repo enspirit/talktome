@@ -37,8 +37,10 @@ pipeline {
 
     stage ('Pushing Docker Images') {
       when {
-        branch 'master'
-        buildingTag()
+        anyOf {
+          branch 'master'
+          buildingTag()
+        }
       }
       steps {
         container('builder') {
