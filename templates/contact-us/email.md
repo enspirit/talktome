@@ -1,14 +1,13 @@
 ---
 subject: |-
-  Someone wants to reach you!
+  {{subject}}
 ---
 Hello,
 
 This person is trying to reach you:
 
-{{#info}}
+{{#allvars}}
   * {{key}}: {{value}}
-{{/info}}
+{{/allvars}}
 
-Truly yours,  
-Sent by [Enspirit.be](https://enspirit.be/), contact us if you need help with any IT task.
+{{footer}}
