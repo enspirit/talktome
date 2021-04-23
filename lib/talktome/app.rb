@@ -27,7 +27,8 @@ module Talktome
 
     post %r{/([a-z-]+)/} do |action|
       begin
-        TALKTOME.talktome(action, {}, info, [:email]){|email|
+        as_array = info.map{|k,v| {'key' => k.capitalize, 'value' => v}}
+        TALKTOME.talktome(action, {}, {'info' => as_array}, [:email]){|email|
           email.reply_to = info[:reply_to] if info.has_key?(:reply_to)
         }
         [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
