@@ -27,7 +27,23 @@ module Talktome
         expect(Mail::TestMailer.deliveries.first.to).to eql(["to@talktome.com"])
         expect(Mail::TestMailer.deliveries.first.from).to eql(["from@talktome.com"])
         expect(Mail::TestMailer.deliveries.first.subject).to eql("Someone wants to reach you!")
-        expect(Mail::TestMailer.deliveries.first.html_part.body).to include("Key: value")
+        expect(Mail::TestMailer.deliveries.first.html_part.body).to include("<li>Key: value</li>")
+        expect(Mail::TestMailer.deliveries.first.html_part.body).to include("Truly yours")
+      end
+
+      it 'allows to use environment variable to tune the subject and the footer' do
+        Talktome.set_env('TALKTOME_EMAIL_SUBJECT', "Subject from environment") do
+          Talktome.set_env('TALKTOME_EMAIL_FOOTER', "Footer from environment") do
+            post "/contact-us/", {
+              reply_to: 'info@domain.com',
+              message: 'This is the message.'
+            }.to_json, { "CONTENT_TYPE" => "application/json" }
+            expect(last_response).to be_ok
+            expect(Mail::TestMailer.deliveries.length).to eql(1)
+            expect(Mail::TestMailer.deliveries.first.subject).to eql("Subject from environment")
+            expect(Mail::TestMailer.deliveries.first.html_part.body).to include("Footer from environment")
+          end
+        end
       end
 
       it 'detects invalid emails' do

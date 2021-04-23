@@ -28,7 +28,10 @@ module Talktome
     post %r{/([a-z-]+)/} do |action|
       begin
         as_array = info.map{|k,v| {'key' => k.capitalize, 'value' => v}}
-        TALKTOME.talktome(action, {}, {'info' => as_array}, [:email]){|email|
+        subject  = Talktome.env('TALKTOME_EMAIL_SUBJECT', 'Someone wants to reach you!')
+        footer   = Talktome.env('TALKTOME_EMAIL_FOOTER', "Truly yours,\n
+          Sent by [Enspirit.be](https://enspirit.be/), contact us if you need help with any IT task.")
+        TALKTOME.talktome(action, {}, info.merge(allvars: as_array, subject: subject, footer: footer), [:email]){|email|
           email.reply_to = info[:reply_to] if info.has_key?(:reply_to)
         }
         [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
