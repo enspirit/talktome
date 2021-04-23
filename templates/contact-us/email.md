@@ -6,8 +6,9 @@ Hello,
 
 This person is trying to reach you:
 
-* Email: {{reply_to}}
-* Message: {{message}}
+{{#info}}
+  * {{key}}: {{value}}
+{{/info}}
 
 Truly yours,  
 Sent by [Enspirit.be](https://enspirit.be/), contact us if you need help with any IT task.
