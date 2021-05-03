@@ -1,6 +1,6 @@
-FROM ruby:2.7.0
+FROM ruby:2.7.0-alpine
 
-RUN apt-get update -qq && apt-get install -y build-essential
+RUN apk add git alpine-sdk
 
 ENV APP_HOME /app/
 
