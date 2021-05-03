@@ -64,3 +64,15 @@ up: Dockerfile.built
 
 test:
 	docker run --rm -e TALKTOME_EMAIL_DEFAULT_FROM=from@talktome.com $(IMAGE) bundle exec rake test
+
+################################################################################
+### Gem Management
+###
+gems:
+	mkdir -p gems
+
+gems/talktome.gem: gems Dockerfile.built
+	docker run -v ${PWD}/:/app -t ${IMAGE} sh -c "gem build talktome.gemspec -o gems/talktome.gem"
+
+gem.publish: gems/talktome.gem
+	docker run -v ${PWD}/:/app -e GEM_HOST_API_KEY=${GEM_HOST_API_KEY} -t ${IMAGE} sh -c "gem push gems/talktome.gem"

@@ -67,6 +67,22 @@ pipeline {
         }
       }
     }
+
+    stage ('Publish to rubygems.org') {
+      environment {
+        GEM_HOST_API_KEY = credentials('jenkins-rubygems-api-key')
+      }
+      when {
+        buildingTag()
+      }
+      steps {
+        container('builder') {
+          script {
+            sh 'make gem.publish'
+          }
+        }
+      }
+    }
   }
 
   post {
