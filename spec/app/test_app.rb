@@ -46,6 +46,22 @@ module Talktome
         end
       end
 
+      it 'allows to use a token authentification to bypass default security measures, for e.g. passing the :to' do
+        Talktome.set_env('TALKTOME_BEARER_SECRET', "Some secret") do
+          header 'Authorization', 'Bearer Some secret'
+          post "/contact-us/", {
+            to: 'hello@visitor.com',
+            reply_to: 'hello@visitor.com',
+            message: 'Hello from visitor',
+            key: 'value',
+          }.to_json, { "CONTENT_TYPE" => "application/json" }
+          expect(last_response).to be_ok
+          expect(Mail::TestMailer.deliveries.length).to eql(1)
+          expect(Mail::TestMailer.deliveries.first.to).to eql(["hello@visitor.com"])
+          expect(Mail::TestMailer.deliveries.first.from).to eql(["from@talktome.com"])
+        end
+      end
+
       it 'detects invalid emails' do
         post "/contact-us/", {
           reply_to: 'helloatvisitor.com',
@@ -69,6 +85,48 @@ module Talktome
         }.to_json, { "CONTENT_TYPE" => "application/json" }
         expect(last_response.status).to eql(400)
         expect(Mail::TestMailer.deliveries.length).to eql(0)
+      end
+
+      it 'forbids usage of :to unless a secret is provided' do
+        post "/contact-us/", {
+          to: 'hello@visitor.com',
+          reply_to: 'hello@visitor.com',
+          message: 'Hello from visitor',
+          key: 'value',
+        }.to_json, { "CONTENT_TYPE" => "application/json" }
+        expect(last_response.status).to eql(400)
+        expect(Mail::TestMailer.deliveries.length).to eql(0)
+      end
+
+      it 'does not allow setting the :to without a valid AUTH token' do
+        Talktome.set_env('TALKTOME_BEARER_SECRET', "Invalid secret") do
+          post "/contact-us/", {
+            to: 'hello@visitor.com',
+            reply_to: 'hello@visitor.com',
+            message: 'Hello from visitor',
+            key: 'value',
+          }.to_json, { "CONTENT_TYPE" => "application/json" }
+          expect(last_response.status).to eql(401)
+          expect(Mail::TestMailer.deliveries.length).to eql(0)
+        end
+      end
+
+      it 'requires a valid Email for :to' do
+        post "/contact-us/", {
+          to: nil,
+          reply_to: 'hello@visitor.com',
+          message: 'Hello from visitor',
+          key: 'value',
+        }.to_json, { "CONTENT_TYPE" => "application/json" }
+        expect(last_response.status).to eql(400)
+
+        post "/contact-us/", {
+          to: "notavalidemail",
+          reply_to: 'hello@visitor.com',
+          message: 'Hello from visitor',
+          key: 'value',
+        }.to_json, { "CONTENT_TYPE" => "application/json" }
+        expect(last_response.status).to eql(400)
       end
 
     end

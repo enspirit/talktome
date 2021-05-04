@@ -105,6 +105,8 @@ TALKTOME_SMTP_DOMAIN             sending domain
 TALKTOME_SMTP_USER               user for smtp authentication
 TALKTOME_SMTP_PASSWORD           password for smtp authentication
 TALKTOME_SMTP_STARTTLS_AUTO      true or false (see ruby Mail library)
+
+TALKTOME_BEARER_SECRET           secret for the webapi, to let send emails to anyone
 ```
 
 ## Hacking Talktome
