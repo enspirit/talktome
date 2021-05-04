@@ -4,6 +4,11 @@
   in auto_options. When set, the folder is used to embed formatted emails
   in more general layouts (see Client::Local.templater).
 
+* Add support for sending an email to a specific user using a :to entry
+  in WebApp api, provided an known secret is provided as Bearer token
+  (for security reason). That allows using Talktome's docker image as a
+  way to send emails to anyone securely.
+
 ## 1.1.0 - 2021/04/23
 
 * Allows the use of environment variables to define subject and footer.

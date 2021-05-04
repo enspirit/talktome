@@ -26,7 +26,7 @@ module Talktome
   def set_env(which, value, &bl)
     old, ENV[which] = ENV[which], value
     bl.call.tap{
-      ENV[which] = old unless old.nil?
+      ENV[which] = old
     }
   end
   module_function :set_env

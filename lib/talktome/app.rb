@@ -18,6 +18,7 @@ module Talktome
       @import finitio/data
       Email = String(s | s =~ /^[^@]+@[^@]+$/ )
       {
+        to       :? Email
         reply_to :? Email
         ...      :  .Object
       }
@@ -31,7 +32,8 @@ module Talktome
         subject  = Talktome.env('TALKTOME_EMAIL_SUBJECT', 'Someone wants to reach you!')
         footer   = Talktome.env('TALKTOME_EMAIL_FOOTER', "Truly yours,\n
           Sent by [Enspirit.be](https://enspirit.be/), contact us if you need help with any IT task.")
-        TALKTOME.talktome(action, {}, info.merge(allvars: as_array, subject: subject, footer: footer), [:email]){|email|
+        user     = load_user_from_info!
+        TALKTOME.talktome(action, user, info.merge(allvars: as_array, subject: subject, footer: footer), [:email]){|email|
           email.reply_to = info[:reply_to] if info.has_key?(:reply_to)
         }
         [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
@@ -52,8 +54,19 @@ module Talktome
       }
     end
 
-    def fail!(message)
-      [ 400, { "Content-Type" => "text/plain"}, [message] ]
+    def load_user_from_info!
+      if to = info[:to]
+        secret = Talktome.env('TALKTOME_BEARER_SECRET')
+        fail!("Missing secret", 400) unless secret
+        fail!("Invalid secret", 401) unless "Bearer #{secret}" == env["HTTP_AUTHORIZATION"]
+        { email: info[:to] }
+      else
+        {}
+      end
+    end
+
+    def fail!(message, status = 400)
+      halt([ status, { "Content-Type" => "text/plain"}, [message] ])
     end
 
     def not_a_robot!(info)
