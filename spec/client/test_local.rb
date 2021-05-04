@@ -41,10 +41,10 @@ module Talktome
         end
       end
 
-      context "with templates" do
+      context "with templates under the :layouts option key" do
         let(:options) {
           {
-            templates: Path.dir/"../fixtures/templates"
+            layouts: Path.dir/"../fixtures/templates"
           }
         }
 
@@ -60,6 +60,19 @@ module Talktome
             seen = m
           }
           expect(seen).not_to be_nil
+        end
+      end
+
+      context "with templates under the :templates option key (backward compatibility)" do
+        let(:options) {
+          {
+            templates: Path.dir/"../fixtures/templates"
+          }
+        }
+
+        it 'sends email when requested' do
+          client.talktome("welcome", user, tpldata, [:email])
+          expect(strategy.last.message.to_html).to eql("<html><title>Hello Test user</title><body><h1>Hello Test user</h1>\n\n<p>Welcome to this email example!</p>\n\n<h3>Test user</h3>\n</body></html>\n")
         end
       end
 

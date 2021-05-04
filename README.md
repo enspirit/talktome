@@ -97,6 +97,8 @@ TALKTOME_EMAIL_DEFAULT_TO        default To: to use for email sending
 TALKTOME_EMAIL_SUBJECT           Set the subject of the default "contact us" email
 TALKTOME_EMAIL_FOOTER            Set the footer of the default "contact us" email
 
+TALKTOME_LAYOUTS_FOLDER          Set the folder to use for messaging layouts
+
 TALKTOME_SMTP_ADDRESS            host address for smtp sending
 TALKTOME_SMTP_PORT               port of smtp server to use
 TALKTOME_SMTP_DOMAIN             sending domain
