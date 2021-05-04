@@ -10,4 +10,3 @@ Gemfile.lock
 /Dockerfile.log
 /Dockerfile.pushed
 /pkg
-gems/
