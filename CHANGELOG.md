@@ -1,11 +1,30 @@
-# 0.3.0 - 2021/03/26
+## 1.2.0
+
+* Add support for a TALKTOME_LAYOUTS_FOLDER environment variable used
+  in auto_options. When set, the folder is used to embed formatted emails
+  in more general layouts (see Client::Local.templater).
+
+## 1.1.0 - 2021/04/23
+
+* Allows the use of environment variables to define subject and footer.
+
+* The Mustache variables now include an `info` entry with all key/value
+  pairs received on api endpoint. Useful for generic emails.
+
+## 1.0.0 - 2021/04/20
+
+* Add a Sinatra app.rb and docker image to send emails easily
+  via environment variables and templates only. Useful for website
+  contact forms.
+
+## 0.3.0 - 2021/03/26
 
 * Update dependencies. Path version must be >= 2.0, which may
   force dependent projects to upgrade too.
 
 * Add travis to check for multi build matrices.
 
-# 0.2.0 - 2019/03/20
+## 0.2.0 - 2019/03/20
 
 * Weaken non-critical dependencies (mustache, path, redcarpet) to avoid unnecessary
   integration issues.
@@ -17,6 +36,6 @@
 * Clients can now be instantiated without options, default options will be
   infered from environment variables.
 
-# 0.1.0 - A long time ago
+## 0.1.0 - A long time ago
 
 Birthday

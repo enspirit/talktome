@@ -33,7 +33,7 @@ module Talktome
       end
 
       def templater(strategy)
-        return nil unless tpl_folder = options[:templates]
+        return nil unless tpl_folder = options[:layouts] || options[:templates]
         ->(message, src, ctype) {
           if (file = tpl_folder/"#{strategy}.#{ctype}").file?
             data = { metadata: message.metadata, yield: src }

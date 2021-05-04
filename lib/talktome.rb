@@ -78,6 +78,10 @@ module Talktome
       }
     }
 
+    if layouts_folder = ENV['TALKTOME_LAYOUTS_FOLDER']
+      options[:layouts] = Path(layouts_folder)
+    end
+
     options
   end
   module_function :auto_options
