@@ -24,7 +24,7 @@ $(info $(TINY) $(MINOR) $(MAJOR))
 ###
 
 clean:
-	rm -rf pkg/
+	rm -rf pkg/*
 	rm -rf Dockerfile.log Dockerfile.built Dockerfile.pushed
 
 Dockerfile.built: Dockerfile $(shell git ls-files)
@@ -62,17 +62,15 @@ Gemfile.lock: Gemfile
 up: Dockerfile.built
 	docker run --rm -p 80:4567 $(IMAGE)
 
-test:
-	docker run --rm -e TALKTOME_EMAIL_DEFAULT_FROM=from@talktome.com $(IMAGE) bundle exec rake test
+test: Dockerfile.built
+	docker run --rm -e TALKTOME_EMAIL_DEFAULT_FROM=from@talktome.com $(IMAGE) sh -c "bundle install && bundle exec rake test"
 
 ################################################################################
 ### Gem Management
 ###
-gems:
-	mkdir -p gems
 
-gems/talktome.gem: gems Dockerfile.built
-	docker run -v ${PWD}/:/app -t ${IMAGE} sh -c "gem build talktome.gemspec -o gems/talktome.gem"
+gem: clean
+	docker run -t --rm -v ${PWD}/:/app -w /app ruby bash -c "bundle install && bundle exec rake gem"
 
-gem.publish: gems/talktome.gem
-	docker run -v ${PWD}/:/app -e GEM_HOST_API_KEY=${GEM_HOST_API_KEY} -t ${IMAGE} sh -c "gem push gems/talktome.gem"
+gem.publish: gem
+	docker run -t --rm -v ${PWD}/:/app -w /app -e GEM_HOST_API_KEY=${GEM_HOST_API_KEY} ruby bash -c "gem push `ls -Art pkg/*.gem | tail -n 1`"

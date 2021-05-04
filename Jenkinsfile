@@ -12,10 +12,19 @@ pipeline {
   }
 
   stages {
-
     stage ('Start') {
       steps {
         sendNotifications('STARTED', SLACK_CHANNEL)
+      }
+    }
+
+    stage ('Clean') {
+      steps {
+        container('builder') {
+          script {
+            sh 'make clean'
+          }
+        }
       }
     }
 
@@ -31,6 +40,32 @@ pipeline {
       steps {
         container('builder') {
           sh 'make test'
+        }
+      }
+    }
+
+    stage ('Building Talktome Gem') {
+      steps {
+        container('builder') {
+          script {
+            sh 'make gem'
+          }
+        }
+      }
+    }
+
+    stage ('Publish Talktome Gem') {
+      environment {
+        GEM_HOST_API_KEY = credentials('jenkins-rubygems-api-key')
+      }
+      when {
+        buildingTag()
+      }
+      steps {
+        container('builder') {
+          script {
+            sh 'make gem.publish'
+          }
         }
       }
     }
@@ -63,22 +98,6 @@ pipeline {
             docker.withRegistry('', 'dockerhub-credentials') {
               sh 'make push-tags'
             }
-          }
-        }
-      }
-    }
-
-    stage ('Publish to rubygems.org') {
-      environment {
-        GEM_HOST_API_KEY = credentials('jenkins-rubygems-api-key')
-      }
-      when {
-        buildingTag()
-      }
-      steps {
-        container('builder') {
-          script {
-            sh 'make gem.publish'
           }
         }
       }

@@ -6,4 +6,3 @@
 /.git
 /Gemfile.lock
 Makefile
-gems/
