@@ -1,4 +1,4 @@
-## 1.2.0
+## 1.2.0 - 2021/05/05
 
 * Add support for a TALKTOME_LAYOUTS_FOLDER environment variable used
   in auto_options. When set, the folder is used to embed formatted emails
