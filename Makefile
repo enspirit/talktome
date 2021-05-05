@@ -53,6 +53,15 @@ push-image: Dockerfile.version.pushed
 push-tags: Dockerfile.tags.pushed
 
 ################################################################################
+### Release helpers
+###
+
+release: clean
+	bundle install
+	bundle exec rake gem
+	gem push `ls -Art pkg/*.gem | tail -n 1`
+
+################################################################################
 ### Main development rules
 ###
 
