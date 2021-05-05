@@ -29,7 +29,7 @@ module Talktome
         strategy.clear!
       }
 
-      context "without templates" do
+      context "without layouts" do
         let(:options) {
           {}
         }
@@ -41,10 +41,10 @@ module Talktome
         end
       end
 
-      context "with templates under the :layouts option key" do
+      context "with layouts under the :layouts option key" do
         let(:options) {
           {
-            layouts: Path.dir/"../fixtures/templates"
+            layouts: Path.dir/"../fixtures/layouts"
           }
         }
 
@@ -63,10 +63,10 @@ module Talktome
         end
       end
 
-      context "with templates under the :templates option key (backward compatibility)" do
+      context "with layouts under the :templates option key (backward compatibility)" do
         let(:options) {
           {
-            templates: Path.dir/"../fixtures/templates"
+            templates: Path.dir/"../fixtures/layouts"
           }
         }
 
