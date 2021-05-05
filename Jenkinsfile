@@ -67,6 +67,21 @@ pipeline {
         }
       }
     }
+
+    stage ('Pushing Ruby gem') {
+      when {
+        branch 'master'
+      }
+      steps {
+        container('builder') {
+          script {
+            rubygems.withRegistry('', 'dockerhub-credentials') {
+              sh 'make release'
+            }
+          }
+        }
+      }
+    }
   }
 
   post {
