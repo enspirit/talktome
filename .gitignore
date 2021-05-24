@@ -1,4 +1,5 @@
-/bin
+/bin/*
+!/bin/release
 /.irb-history
 /.bash_history
 /.bundle
