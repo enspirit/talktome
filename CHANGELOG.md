@@ -1,4 +1,4 @@
-## 1.3.0
+## 1.3.0 - 2021/05/31
 
 * Add support for subfolders in Talktome Sinatra default App.
 
