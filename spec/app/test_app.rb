@@ -9,6 +9,7 @@ module Talktome
     }
 
     before(:each) do
+      Talktome::App.set :talktome, Talktome::Client::Local.new(Path.dir.parent/'fixtures')
       ENV['TALKTOME_EMAIL_DEFAULT_TO'] = "to@talktome.com"
       ENV['TALKTOME_EMAIL_DEFAULT_FROM'] = "from@talktome.com"
       Mail::TestMailer.deliveries.clear
@@ -159,6 +160,25 @@ module Talktome
         expect(last_response).to be_ok
         expect(Mail::TestMailer.deliveries.length).to eql(1)
         expect(Mail::TestMailer.deliveries.first.reply_to).to eql(["hello@visitor.com"])
+      end
+    end
+
+    context 'POST /multi-lingual/en/' do
+
+      it 'works' do
+        post "/multi-lingual/en/", {
+          reply_to: 'hello@visitor.com',
+          message: 'Hello from visitor',
+          key: 'value',
+        }.to_json, { "CONTENT_TYPE" => "application/json" }
+        expect(last_response.status).to eql(200)
+        expect(last_response).to be_ok
+        expect(Mail::TestMailer.deliveries.length).to eql(1)
+        expect(Mail::TestMailer.deliveries.first.to).to eql(["to@talktome.com"])
+        expect(Mail::TestMailer.deliveries.first.from).to eql(["from@talktome.com"])
+        expect(Mail::TestMailer.deliveries.first.subject).to eql("Someone wants to reach you!")
+        expect(Mail::TestMailer.deliveries.first.html_part.body).to include("<li>Key: value</li>")
+        expect(Mail::TestMailer.deliveries.first.html_part.body).to include("Truly yours")
       end
     end
 

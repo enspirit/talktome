@@ -1,3 +1,7 @@
+## 1.3.0
+
+* Add support for subfolders in Talktome Sinatra default App.
+
 ## 1.2.0 - 2021/05/05
 
 * Add support for a TALKTOME_LAYOUTS_FOLDER environment variable used

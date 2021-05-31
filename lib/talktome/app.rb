@@ -13,6 +13,7 @@ module Talktome
 
     set :raise_errors, true
     set :show_exceptions, false
+    set :talktome, Talktome::Client::Local.new(ROOT_FOLDER/'templates')
 
     VALIDATION_SCHEMA = ::Finitio.system(<<~FIO)
       @import finitio/data
@@ -24,16 +25,14 @@ module Talktome
       }
     FIO
 
-    TALKTOME = Talktome::Client::Local.new(ROOT_FOLDER/'templates')
-
-    post %r{/([a-z-]+)/} do |action|
+    post %r{/([a-z-]+([\/][a-z-]+)*)/} do |action, _|
       begin
         as_array = info.map{|k,v| {'key' => k.capitalize, 'value' => v}}
         subject  = Talktome.env('TALKTOME_EMAIL_SUBJECT', 'Someone wants to reach you!')
         footer   = Talktome.env('TALKTOME_EMAIL_FOOTER', "Truly yours,\n
           Sent by [Enspirit.be](https://enspirit.be/), contact us if you need help with any IT task.")
         user     = load_user_from_info!
-        TALKTOME.talktome(action, user, info.merge(allvars: as_array, subject: subject, footer: footer), [:email]){|email|
+        settings.talktome.talktome(action, user, info.merge(allvars: as_array, subject: subject, footer: footer), [:email]){|email|
           email.reply_to = info[:reply_to] if info.has_key?(:reply_to)
         }
         [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
