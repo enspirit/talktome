@@ -1,4 +1,4 @@
-## 1.3.1
+## 1.3.1 - 2021-06-11
 
 * POSTing to an existing email template route correctly returns a 404.
 
