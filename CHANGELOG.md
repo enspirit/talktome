@@ -1,3 +1,7 @@
+## 1.3.1
+
+* POSTing to an existing email template route correctly returns a 404.
+
 ## 1.3.0 - 2021/05/31
 
 * Add support for subfolders in Talktome Sinatra default App.

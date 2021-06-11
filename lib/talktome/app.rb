@@ -40,8 +40,10 @@ module Talktome
         fail!("Invalid data")
       rescue Finitio::Error => ex
         fail!(ex.message)
-      rescue ::Talktome::InvalidEmailError => ex
+      rescue ::Talktome::InvalidEmailError
         fail!("Invalid email address")
+      rescue ::Talktome::TemplateNotFoundError
+        fail!("No such template", 404)
       end
     end
 

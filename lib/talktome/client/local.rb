@@ -17,7 +17,7 @@ module Talktome
 
       def load_message!(identifier, strategies)
         folder = self.folder/identifier
-        raise InvalidMessageError, "No such message `#{identifier}`"            unless folder.exists?
+        raise TemplateNotFoundError, "No such message `#{identifier}`"            unless folder.exists?
         raise InvalidMessageError, "Message `#{identifier}` should be a folder" unless folder.directory?
         strategies.each do |s|
           if (file = folder.glob("#{s}.*").first) && file.file?

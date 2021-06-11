@@ -182,5 +182,19 @@ module Talktome
       end
     end
 
+    context 'POST /xxx when the template does not exist' do
+
+      it 'return a 404 error when the template doesn\'t exist' do
+        post "/multi-lingual/fr/", {
+          reply_to: 'hello@visitor.com',
+          message: 'Hello from visitor',
+          key: 'value',
+        }.to_json, { "CONTENT_TYPE" => "application/json" }
+
+        expect(last_response.status).to eql(404)
+        expect(last_response.body).to match(/No such template/)
+      end
+    end
+
   end
 end

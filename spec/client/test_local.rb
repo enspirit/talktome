@@ -74,6 +74,7 @@ module Talktome
           client.talktome("welcome", user, tpldata, [:email])
           expect(strategy.last.message.to_html).to eql("<html><title>Hello Test user</title><body><h1>Hello Test user</h1>\n\n<p>Welcome to this email example!</p>\n\n<h3>Test user</h3>\n</body></html>\n")
         end
+
       end
 
     end
