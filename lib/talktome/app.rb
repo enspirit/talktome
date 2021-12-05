@@ -19,9 +19,10 @@ module Talktome
       @import finitio/data
       Email = String(s | s =~ /^[^@]+@[^@]+$/ )
       {
-        to       :? Email
-        reply_to :? Email
-        ...      :  .Object
+        to          :? Email
+        reply_to    :? Email
+        in_reply_to :? String
+        ...         :  .Object
       }
     FIO
 
@@ -34,6 +35,7 @@ module Talktome
         user     = load_user_from_info!
         settings.talktome.talktome(action, user, info.merge(allvars: as_array, subject: subject, footer: footer), [:email]){|email|
           email.reply_to = info[:reply_to] if info.has_key?(:reply_to)
+          email.in_reply_to = info[:in_reply_to] if info.has_key?(:in_reply_to)
         }
         [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
       rescue JSON::ParserError
@@ -56,7 +58,8 @@ module Talktome
     end
 
     def load_user_from_info!
-      if to = info[:to]
+      protected_fields = [:to, :in_reply_to]
+      if (info.keys & protected_fields).any?
         secret = Talktome.env('TALKTOME_BEARER_SECRET')
         fail!("Missing secret", 400) unless secret
         fail!("Invalid secret", 401) unless "Bearer #{secret}" == env["HTTP_AUTHORIZATION"]

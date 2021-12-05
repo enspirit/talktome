@@ -163,6 +163,45 @@ module Talktome
       end
     end
 
+    context 'POST /support/, regarding the In-Reply-To' do
+      class ::Talktome::Message::Template
+        def raise_on_context_miss?
+          false
+        end
+      end
+
+      it 'forbids the usage of :in_reply_to unless a secret is provided' do
+        post "/support/", {
+          in_reply_to: '<F6E2D0B4-CC35-4A91-BA4C-C7C712B10C13@company.com>',
+      }.to_json, { "CONTENT_TYPE" => "application/json" }
+        expect(last_response.status).to eql(400)
+        expect(Mail::TestMailer.deliveries.length).to eql(0)
+      end
+
+      it 'does not allow setting the :in_reply_to without a valid AUTH token' do
+        Talktome.set_env('TALKTOME_BEARER_SECRET', "Invalid secret") do
+          post "/support/", {
+            in_reply_to: '<F6E2D0B4-CC35-4A91-BA4C-C7C712B10C13@company.com>',
+          }.to_json, { "CONTENT_TYPE" => "application/json" }
+          expect(last_response.status).to eql(401)
+          expect(Mail::TestMailer.deliveries.length).to eql(0)
+        end
+      end
+
+      it "lets override it by passing a inReplyTo field" do
+        Talktome.set_env('TALKTOME_BEARER_SECRET', "Some secret") do
+          header 'Authorization', 'Bearer Some secret'
+          post "/support/", {
+            to: 'client@company.com',
+            in_reply_to: '<F6E2D0B4-CC35-4A91-BA4C-C7C712B10C13@company.com>',
+          }.to_json, { "CONTENT_TYPE" => "application/json" }
+          expect(last_response).to be_ok
+          expect(Mail::TestMailer.deliveries.length).to eql(1)
+          expect(Mail::TestMailer.deliveries.first.in_reply_to).to eql('F6E2D0B4-CC35-4A91-BA4C-C7C712B10C13@company.com')
+        end
+      end
+    end
+
     context 'POST /multi-lingual/en/' do
 
       it 'works' do
