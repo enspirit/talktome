@@ -1,3 +1,7 @@
+## 1.3.2 - 2021-12-05
+
+* Add support for In-Reply-To.
+
 ## 1.3.1 - 2021-06-11
 
 * POSTing to an existing email template route correctly returns a 404.
