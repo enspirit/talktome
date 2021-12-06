@@ -17,6 +17,7 @@ module Talktome
           :to,
           :reply_to,
           :in_reply_to,
+          :attachments,
           :subject
         ].each do |which|
           if arg = message.metadata[which.to_s]

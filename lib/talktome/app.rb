@@ -17,11 +17,18 @@ module Talktome
 
     VALIDATION_SCHEMA = ::Finitio.system(<<~FIO)
       @import finitio/data
+      Attachment = {
+        mime_type : String
+        content   : .Object
+      }
       Email = String(s | s =~ /^[^@]+@[^@]+$/ )
       {
         to          :? Email
         reply_to    :? Email
         in_reply_to :? String
+        attachments :? {
+          ...       : Attachment
+        }
         ...         :  .Object
       }
     FIO
@@ -36,6 +43,9 @@ module Talktome
         settings.talktome.talktome(action, user, info.merge(allvars: as_array, subject: subject, footer: footer), [:email]){|email|
           email.reply_to = info[:reply_to] if info.has_key?(:reply_to)
           email.in_reply_to = info[:in_reply_to] if info.has_key?(:in_reply_to)
+          (info[:attachments] || {}).each do |name, att|
+            email.attachments[name.to_s] = att
+          end
         }
         [ 200, { "Content-Type" => "text/plain"}, ["Ok"] ]
       rescue JSON::ParserError
@@ -58,7 +68,7 @@ module Talktome
     end
 
     def load_user_from_info!
-      protected_fields = [:to, :in_reply_to]
+      protected_fields = [:to, :in_reply_to, :attachments]
       if (info.keys & protected_fields).any?
         secret = Talktome.env('TALKTOME_BEARER_SECRET')
         fail!("Missing secret", 400) unless secret
