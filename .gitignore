@@ -10,3 +10,6 @@ Gemfile.lock
 /Dockerfile.log
 /Dockerfile.pushed
 /pkg
+talktome.gem
+gems/
+Dockerfile*.pushed

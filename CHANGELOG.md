@@ -1,3 +1,7 @@
+## 1.3.3 - 2021-12-07
+
+* Add support for attachments.
+
 ## 1.3.2 - 2021-12-05
 
 * Add support for In-Reply-To.
