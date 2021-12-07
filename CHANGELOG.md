@@ -1,3 +1,7 @@
+## 1.3.4 - 2021-12-07
+
+* Add support for configurable attachment content encoding.
+
 ## 1.3.3 - 2021-12-07
 
 * Add support for attachments.
