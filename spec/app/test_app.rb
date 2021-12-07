@@ -202,6 +202,65 @@ module Talktome
       end
     end
 
+    context 'POST /support/, regarding the attachments' do
+      class ::Talktome::Message::Template
+        def raise_on_context_miss?
+          false
+        end
+      end
+
+      it 'forbids the usage of :attachments unless a secret is provided' do
+        post "/support/", {
+          :to => 'client@company.com',
+          :attachments => {
+            "plain.txt" => {
+              "mime_type" => "plain/text",
+              "content" => Base64.encode64('Some plain/text attachment')
+            }
+          }
+        }.to_json, { "CONTENT_TYPE" => "application/json" }
+        expect(last_response.status).to eql(400)
+        expect(Mail::TestMailer.deliveries.length).to eql(0)
+      end
+
+      it 'does not allow setting the :attachments without a valid AUTH token' do
+        Talktome.set_env('TALKTOME_BEARER_SECRET', "Invalid secret") do
+          post "/support/", {
+            :to => 'client@company.com',
+            :attachments => {
+              "plain.txt" => {
+                "mime_type" => "plain/text",
+                "content" => Base64.encode64('Some plain/text attachment')
+              }
+            }
+          }.to_json, { "CONTENT_TYPE" => "application/json" }
+          expect(last_response.status).to eql(401)
+          expect(Mail::TestMailer.deliveries.length).to eql(0)
+        end
+      end
+
+      it "lets customize attachments by passing an array" do
+        Talktome.set_env('TALKTOME_BEARER_SECRET', "Some secret") do
+          header 'Authorization', 'Bearer Some secret'
+          post "/support/", {
+            :to => 'client@company.com',
+            :attachments => {
+              "plain.txt" => {
+                "mime_type" => "plain/text",
+                "content" => Base64.encode64('Some plain/text attachment')
+              }
+            }
+          }.to_json, { "CONTENT_TYPE" => "application/json" }
+          expect(last_response).to be_ok
+          expect(Mail::TestMailer.deliveries.length).to eql(1)
+          mail = Mail::TestMailer.deliveries.first
+          expect(mail.attachments['plain.txt']).to be_a_kind_of(Mail::Part)
+          file = mail.attachments['plain.txt']
+          expect(file).to be_a_kind_of(Mail::Part)
+        end
+      end
+    end
+
     context 'POST /multi-lingual/en/' do
 
       it 'works' do
