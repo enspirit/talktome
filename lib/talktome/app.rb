@@ -18,8 +18,9 @@ module Talktome
     VALIDATION_SCHEMA = ::Finitio.system(<<~FIO)
       @import finitio/data
       Attachment = {
-        mime_type : String
-        content   : .Object
+        mime_type :  String
+        content   :  .Object
+        encoding  :? String
       }
       Email = String(s | s =~ /^[^@]+@[^@]+$/ )
       {
