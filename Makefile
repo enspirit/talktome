@@ -60,7 +60,7 @@ Gemfile.lock: Gemfile
 	bundle install
 
 up: Dockerfile.built
-	docker run -d --rm -p 80:4567 $(IMAGE)
+	docker run -d -p 80:3000 $(IMAGE)
 
 test: Dockerfile.built
 	docker run --rm -e TALKTOME_EMAIL_DEFAULT_FROM=from@talktome.com $(IMAGE) sh -c "bundle install && bundle exec rake test"
