@@ -74,3 +74,6 @@ gem: clean
 
 gem.publish: gem
 	docker run -t --rm -v ${PWD}/:/app -w /app -e GEM_HOST_API_KEY=${GEM_HOST_API_KEY} ruby bash -c "gem push `ls -Art pkg/*.gem | tail -n 1`"
+
+gem.publish.ci:
+	gem push `ls -Art pkg/*.gem | tail -n 1`
