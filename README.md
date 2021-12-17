@@ -30,7 +30,7 @@ a reusable backend for contact forms.
 
 ```
 docker run \
-    -p4567:4567 \
+    -p 3000:3000 \
     -e TALKTOME_EMAIL_DEFAULT_FROM=info@mydomain.com
     -e TALKTOME_EMAIL_DEFAULT_TO=support@mydomain.com
     enspirit/talktome
@@ -42,7 +42,7 @@ Send an contact-us email through the web api using curl, as follows:
 curl -XPOST \
      -H'Content-Type: application/json' \
      -d'{"reply_to": "someone@foo.bar", "message": "Hello"}' \
-     http://127.0.0.1:4567/contact-us/
+     http://127.0.0.1:3000/contact-us/
 ```
 
 This web API does not allow specifying `from` and `to` as input data to avoid
