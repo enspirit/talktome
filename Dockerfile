@@ -1,4 +1,4 @@
-FROM ruby:2.7.0-alpine
+FROM ruby:2.7.4-alpine
 
 RUN apk add git alpine-sdk
 
