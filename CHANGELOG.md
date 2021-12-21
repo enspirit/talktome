@@ -1,3 +1,8 @@
+## 2.0.0 - 2021-12-21
+
+* Change port to 3000
+* Runs as non root user
+
 ## 1.3.4 - 2021-12-07
 
 * Add support for configurable attachment content encoding.
