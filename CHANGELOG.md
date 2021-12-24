@@ -1,3 +1,9 @@
+## 2.0.2 - 2021-12-24
+
+* Configurable OpenSSL verify mode from env variable.
+## 2.0.1 - 2021-12-24
+
+* Docker image: fix app's ownership of sources
 ## 2.0.0 - 2021-12-21
 
 * Change port to 3000
