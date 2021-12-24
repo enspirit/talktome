@@ -87,26 +87,27 @@ The easiest way to configure Talktome is through environment variables. The foll
 ones are supported:
 
 ```
-TALKTOME_DEBUG                   when set enables the dumping of sent messages to ./tmp folder
+TALKTOME_DEBUG                      when set enables the dumping of sent messages to ./tmp folder
 
-TALKTOME_EMAIL_DELIVERY          smtp, file or test (see ruby Mail library)
-TALKTOME_EMAIL_DEFAULT_FROM      default From: to use for email sending
-TALKTOME_EMAIL_DEFAULT_REPLYTO   default Reply-To: to use for email sending
-TALKTOME_EMAIL_DEFAULT_TO        default To: to use for email sending
+TALKTOME_EMAIL_DELIVERY             smtp, file or test (see ruby Mail library)
+TALKTOME_EMAIL_DEFAULT_FROM         default From: to use for email sending
+TALKTOME_EMAIL_DEFAULT_REPLYTO      default Reply-To: to use for email sending
+TALKTOME_EMAIL_DEFAULT_TO           default To: to use for email sending
 
-TALKTOME_EMAIL_SUBJECT           Set the subject of the default "contact us" email
-TALKTOME_EMAIL_FOOTER            Set the footer of the default "contact us" email
+TALKTOME_EMAIL_SUBJECT              Set the subject of the default "contact us" email
+TALKTOME_EMAIL_FOOTER               Set the footer of the default "contact us" email
 
-TALKTOME_LAYOUTS_FOLDER          Set the folder to use for messaging layouts
+TALKTOME_LAYOUTS_FOLDER             Set the folder to use for messaging layouts
 
-TALKTOME_SMTP_ADDRESS            host address for smtp sending
-TALKTOME_SMTP_PORT               port of smtp server to use
-TALKTOME_SMTP_DOMAIN             sending domain
-TALKTOME_SMTP_USER               user for smtp authentication
-TALKTOME_SMTP_PASSWORD           password for smtp authentication
-TALKTOME_SMTP_STARTTLS_AUTO      true or false (see ruby Mail library)
+TALKTOME_SMTP_ADDRESS               host address for smtp sending
+TALKTOME_SMTP_PORT                  port of smtp server to use
+TALKTOME_SMTP_DOMAIN                sending domain
+TALKTOME_SMTP_USER                  user for smtp authentication
+TALKTOME_SMTP_PASSWORD              password for smtp authentication
+TALKTOME_SMTP_STARTTLS_AUTO         true or false (see ruby Mail library)
+TALKTOME_SMTP_OPENSSL_VERIFY_MODE   none or peer (see ruby Mail library). Defaults to peer.
 
-TALKTOME_BEARER_SECRET           secret for the webapi, to let send emails to anyone
+TALKTOME_BEARER_SECRET              secret for the webapi, to let send emails to anyone
 ```
 
 ## Hacking Talktome

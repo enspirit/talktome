@@ -58,7 +58,8 @@ module Talktome
       domain:    ENV['TALKTOME_SMTP_DOMAIN'],
       user_name: ENV['TALKTOME_SMTP_USER'],
       password:  ENV['TALKTOME_SMTP_PASSWORD'],
-      enable_starttls_auto: (ENV['TALKTOME_SMTP_STARTTLS_AUTO'] != 'false')
+      enable_starttls_auto: (ENV['TALKTOME_SMTP_STARTTLS_AUTO'] != 'false'),
+      openssl_verify_mode: ENV['TALKTOME_SMTP_OPENSSL_VERIFY_MODE'] || "peer",
     }) if email_delivery == :smtp
 
     email_config.merge!({
