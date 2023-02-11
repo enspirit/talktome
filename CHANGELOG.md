@@ -1,3 +1,8 @@
+## 2.0.3 - 2023-02-11
+
+* Allow finitio 0.11.x, to avoid deadlocks on projects using
+  talktome as a library.
+
 ## 2.0.2 - 2021-12-24
 
 * Configurable OpenSSL verify mode from env variable.
