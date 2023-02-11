@@ -1,3 +1,7 @@
+## 2.0.4 - 2023-02-11
+
+* Fix gem.
+
 ## 2.0.3 - 2023-02-11
 
 * Allow finitio 0.11.x, to avoid deadlocks on projects using
