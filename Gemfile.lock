@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    talktome (2.0.4)
+    talktome (2.1.0)
       finitio (>= 0.10.0, < 0.12.0)
       mail (~> 2, >= 2.7.1)
       mustache (~> 1)
@@ -26,7 +26,7 @@ GEM
       net-smtp
     mini_mime (1.1.2)
     mustache (1.1.1)
-    mustermann (2.0.2)
+    mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     net-imap (0.3.4)
       date
@@ -39,10 +39,10 @@ GEM
       net-protocol
     nio4r (2.5.8)
     path (2.0.1)
-    puma (6.0.2)
+    puma (6.1.0)
       nio4r (~> 2.0)
     rack (2.2.6.2)
-    rack-protection (2.2.4)
+    rack-protection (3.0.5)
       rack
     rack-robustness (1.1.0)
     rack-test (0.6.3)
@@ -63,13 +63,13 @@ GEM
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
     ruby2_keywords (0.0.5)
-    sinatra (2.2.4)
-      mustermann (~> 2.0)
-      rack (~> 2.2)
-      rack-protection (= 2.2.4)
+    sinatra (3.0.5)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.0.5)
       tilt (~> 2.0)
-    tilt (2.0.11)
-    timeout (0.3.1)
+    tilt (2.1.0)
+    timeout (0.3.2)
 
 PLATFORMS
   ruby
