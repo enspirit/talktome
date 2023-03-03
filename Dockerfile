@@ -1,4 +1,4 @@
-FROM ruby:alpine3.15
+FROM ruby:3-alpine3.15
 
 ENV APP_HOME=/home/app
 
