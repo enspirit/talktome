@@ -1,4 +1,5 @@
-FROM ruby:alpine3.15
+ARG MRI_VERSION
+FROM ruby:${MRI_VERSION}-alpine
 
 ENV APP_HOME=/home/app
 

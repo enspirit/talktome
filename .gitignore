@@ -12,3 +12,4 @@
 talktome.gem
 gems/
 Dockerfile*.pushed
+.build
