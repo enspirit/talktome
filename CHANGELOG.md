@@ -1,4 +1,4 @@
-## 2.2.0 - xxx
+## 2.2.0 - 2023-05-26
 
 * BREAKING: drop support for ruby < 2.7
 * Upgrade finitio to 0.12.x
