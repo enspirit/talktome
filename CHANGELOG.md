@@ -1,3 +1,8 @@
+## 2.2.0 - xxx
+
+* BREAKING: drop support for ruby < 2.7
+* Upgrade finitio to 0.12.x
+
 ## 2.1.0 - 2023-03-03
 
 * Allow using sinatra 3.x.

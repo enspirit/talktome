@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    talktome (2.1.0)
-      finitio (>= 0.10.0, < 0.12.0)
+    talktome (2.2.0)
+      finitio (>= 0.12.0, < 0.13.0)
       mail (~> 2, >= 2.7.1)
       mustache (~> 1)
       path (>= 2.0)
@@ -17,7 +17,7 @@ GEM
     citrus (3.0.2)
     date (3.3.3)
     diff-lcs (1.5.0)
-    finitio (0.11.4)
+    finitio (0.12.0)
       citrus (>= 3.0, < 4.0)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
@@ -37,12 +37,12 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    nio4r (2.5.8)
-    path (2.0.1)
-    puma (6.1.0)
+    nio4r (2.5.9)
+    path (2.1.0)
+    puma (6.2.2)
       nio4r (~> 2.0)
     rack (2.2.6.2)
-    rack-protection (3.0.5)
+    rack-protection (3.0.6)
       rack
     rack-robustness (1.1.0)
     rack-test (0.6.3)
@@ -63,10 +63,10 @@ GEM
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
     ruby2_keywords (0.0.5)
-    sinatra (3.0.5)
+    sinatra (3.0.6)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.0.5)
+      rack-protection (= 3.0.6)
       tilt (~> 2.0)
     tilt (2.1.0)
     timeout (0.3.2)
