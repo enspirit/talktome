@@ -70,11 +70,11 @@ test: bundle
 ### Gem Management
 ###
 
-gem: clean
-	docker run -t --rm -v ${PWD}/:/app -w /app ruby bash -c "bundle install && bundle exec rake gem"
+gem: clean bundle
+	bundle exec rake gem
 
 gem.publish: gem
-	docker run -t --rm -v ${PWD}/:/app -w /app -e GEM_HOST_API_KEY=${GEM_HOST_API_KEY} ruby bash -c "gem push `ls -Art pkg/*.gem | tail -n 1`"
+	gem push `ls -Art pkg/*.gem | tail -n 1`
 
 gem.publish.ci:
 	gem push `ls -Art pkg/*.gem | tail -n 1`
