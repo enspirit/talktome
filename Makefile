@@ -9,9 +9,14 @@ DOCKER_REGISTRY := $(or ${DOCKER_REGISTRY},${DOCKER_REGISTRY},docker.io)
 # Load them from an optional .env file
 -include .env
 
+# Specify which ruby version is used as base
+DEFAULT_MRI_VERSION := 3.1
+MRI_VERSION := $(or ${MRI_VERSION},${MRI_VERSION},$(DEFAULT_MRI_VERSION))
+
 # Specify which docker tag is to be used
 VERSION := $(or ${VERSION},${VERSION},latest)
 DOCKER_REGISTRY := $(or ${DOCKER_REGISTRY},${DOCKER_REGISTRY},docker.io)
+PLATFORMS := linux/amd64,linux/arm64/v8
 
 TINY = ${VERSION}
 MINOR = $(shell echo '${TINY}' | cut -f'1-2' -d'.')
@@ -28,42 +33,38 @@ clean:
 	rm -rf Dockerfile.log Dockerfile.built Dockerfile.pushed
 
 Dockerfile.built: Dockerfile $(shell git ls-files)
-	docker build -t $(IMAGE) . | tee Dockerfile.log
+	@docker buildx build -f Dockerfile ./ \
+		--push \
+		--build-arg MRI_VERSION=${MRI_VERSION} \
+		--platform ${PLATFORMS} \
+		-t $(DOCKER_REGISTRY)/enspirit/talktome \
+		-t $(DOCKER_REGISTRY)/enspirit/talktome:${TINY} \
+		-t $(DOCKER_REGISTRY)/enspirit/talktome:${MINOR} \
+		-t $(DOCKER_REGISTRY)/enspirit/talktome:ruby${MRI_VERSION} \
+		-t $(DOCKER_REGISTRY)/enspirit/talktome:$(TINY)-ruby${MRI_VERSION} \
+		-t $(DOCKER_REGISTRY)/enspirit/talktome:$(MINOR)-ruby${MRI_VERSION}
+
 	touch Dockerfile.built
 
-image: Dockerfile.built
+.build/buildx.builder:
+	mkdir -p .build
+	docker buildx create --use --name talktome
+	touch .build/buildx.builder
 
-Dockerfile.version.pushed: Dockerfile.built
-	@if [ -z "$(DOCKER_REGISTRY)" ]; then \
-		echo "No private registry defined, ignoring. (set DOCKER_REGISTRY or place it in .env file)"; \
-		return 1; \
-	fi
-	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):$(VERSION)
-	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(VERSION) | tee -a Dockerfile.log
-	touch Dockerfile.version.pushed
-
-Dockerfile.tags.pushed: Dockerfile.version.pushed
-	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):${MINOR}
-	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(MINOR) | tee -a Dockerfile.log
-	docker tag $(IMAGE) $(DOCKER_REGISTRY)/$(IMAGE):${MAJOR}
-	docker push $(DOCKER_REGISTRY)/$(IMAGE):$(MAJOR) | tee -a Dockerfile.log
-	touch Dockerfile.tags.pushed
-
-push-image: Dockerfile.version.pushed
-push-tags: Dockerfile.tags.pushed
+image: .build/buildx.builder Dockerfile.built
 
 ################################################################################
 ### Main development rules
 ###
 
-Gemfile.lock: Gemfile
+bundle:
 	bundle install
 
 up: Dockerfile.built
 	docker run -d -p 80:3000 $(IMAGE)
 
-test: Dockerfile.built
-	docker run --rm -e TALKTOME_EMAIL_DEFAULT_FROM=from@talktome.com $(IMAGE) sh -c "bundle install && bundle exec rake test"
+test: bundle
+	bundle exec rake test
 
 ################################################################################
 ### Gem Management
