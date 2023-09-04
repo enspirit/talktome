@@ -1,3 +1,14 @@
+## 2.2.4
+
+* Layouts are instantiated with all message data available,
+  not only metadata and yield. This allows sending emails
+  using fixed data at the layout level, such as the language
+  as shown in the spec test.
+
+## 2.2.2 & 2.2.3 - 2023-05-26
+
+* Ci&CD script fixes
+
 ## 2.2.1 - 2023-05-26
 
 * Multi-arch docker images

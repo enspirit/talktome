@@ -22,7 +22,10 @@ module Talktome
       }
 
       let(:tpldata) {
-        { who: "Test user" }
+        {
+          who: "Test user",
+          lang: "en",
+        }
       }
 
       before(:each) {
@@ -51,7 +54,7 @@ module Talktome
         it 'sends email when requested' do
           client.talktome("welcome", user, tpldata, [:email])
           expect(strategy.last.message).not_to be_nil
-          expect(strategy.last.message.to_html).to eql("<html><title>Hello Test user</title><body><h1>Hello Test user</h1>\n\n<p>Welcome to this email example!</p>\n\n<h3>Test user</h3>\n</body></html>\n")
+          expect(strategy.last.message.to_html).to eql("<html lang='en'><title>Hello Test user</title><body><h1>Hello Test user</h1>\n\n<p>Welcome to this email example!</p>\n\n<h3>Test user</h3>\n</body></html>\n")
         end
 
         it 'yields the callback with the email' do
@@ -72,7 +75,7 @@ module Talktome
 
         it 'sends email when requested' do
           client.talktome("welcome", user, tpldata, [:email])
-          expect(strategy.last.message.to_html).to eql("<html><title>Hello Test user</title><body><h1>Hello Test user</h1>\n\n<p>Welcome to this email example!</p>\n\n<h3>Test user</h3>\n</body></html>\n")
+          expect(strategy.last.message.to_html).to eql("<html lang='en'><title>Hello Test user</title><body><h1>Hello Test user</h1>\n\n<p>Welcome to this email example!</p>\n\n<h3>Test user</h3>\n</body></html>\n")
         end
 
       end
