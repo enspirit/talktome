@@ -1,4 +1,4 @@
-## 2.2.4
+## 2.2.4 - 2023-09-04
 
 * Layouts are instantiated with all message data available,
   not only metadata and yield. This allows sending emails
