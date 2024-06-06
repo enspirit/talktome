@@ -16,13 +16,13 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rake", "~> 13"
   s.add_development_dependency "rspec", "~> 3.10"
-  s.add_development_dependency 'rack-test', '0.6.3'
+  s.add_development_dependency 'rack-test', '>= 2.1', '< 3.0'
 
   s.add_runtime_dependency 'path', '>= 2.0'
   s.add_runtime_dependency 'mail', '~> 2', '>= 2.7.1'
   s.add_runtime_dependency 'mustache', '~> 1'
   s.add_runtime_dependency 'redcarpet','~> 3'
-  s.add_runtime_dependency 'sinatra', '>= 2.1', '< 4.0'
+  s.add_runtime_dependency 'sinatra', '>= 3.2', '< 4.0'
   s.add_runtime_dependency 'finitio', '>= 0.12.0', '< 0.13.0'
   s.add_runtime_dependency 'rack-robustness', '~> 1.1'
   s.add_runtime_dependency 'puma', '>= 5.5'

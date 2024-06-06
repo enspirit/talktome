@@ -1,5 +1,7 @@
 ## 2.3.0
 
+* Sinatra >= 3.2 must be used.
+
 * Add support for a TALKTOME_VALIDATION_SCHEMA instance variable
   that will be used for validating input data of the main webservice.
   This is handy for, e.g. validate content used in email templates
