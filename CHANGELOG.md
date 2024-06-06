@@ -1,3 +1,14 @@
+## 2.3.0
+
+* Add support for a TALKTOME_VALIDATION_SCHEMA instance variable
+  that will be used for validating input data of the main webservice.
+  This is handy for, e.g. validate content used in email templates
+  down the call.
+
+  Default value allows and validates the optional `to`, `reply_to`,
+  `in_reply_to` and `attachments` supported input. You must either
+  include them, or forbid them, when overriding the SCHEMA.
+
 ## 2.2.4 - 2023-09-04
 
 * Layouts are instantiated with all message data available,

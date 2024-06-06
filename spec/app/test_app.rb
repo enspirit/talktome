@@ -65,6 +65,15 @@ module Talktome
 
       it 'detects invalid emails' do
         post "/contact-us/", {
+          to: 'helloatvisitor.com',
+          message: 'Hello from visitor'
+        }.to_json, { "CONTENT_TYPE" => "application/json" }
+        expect(last_response.status).to eql(400)
+        expect(Mail::TestMailer.deliveries.length).to eql(0)
+      end
+
+      it 'detects invalid emails' do
+        post "/contact-us/", {
           reply_to: 'helloatvisitor.com',
           message: 'Hello from visitor'
         }.to_json, { "CONTENT_TYPE" => "application/json" }

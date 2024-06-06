@@ -23,15 +23,16 @@ module Talktome
         encoding  :? String
       }
       Email = String(s | s =~ /^[^@]+@[^@]+$/ )
-      {
+      Base = {
         to          :? Email
         reply_to    :? Email
         in_reply_to :? String
         attachments :? {
           ...       : Attachment
         }
-        ...         :  .Object
+        ...         : .Object
       }
+      #{Talktome.env('TALKTOME_VALIDATION_SCHEMA', 'Base')}
     FIO
 
     post %r{/([a-z-]+([\/][a-z-]+)*)/} do |action, _|
