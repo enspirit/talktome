@@ -11,6 +11,12 @@ module Talktome
       g.body{ "An error occured." }
     end
 
+    if key_space_limit = Talktome.env('RACK_KEY_SPACE_LIMIT')
+      if Rack::Utils.respond_to?("key_space_limit=")
+        Rack::Utils.key_space_limit = key_space_limit.to_i
+      end
+    end
+
     set :raise_errors, true
     set :show_exceptions, false
     set :talktome, Talktome::Client::Local.new(ROOT_FOLDER/'templates')

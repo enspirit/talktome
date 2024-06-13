@@ -108,6 +108,8 @@ TALKTOME_SMTP_STARTTLS_AUTO         true or false (see ruby Mail library)
 TALKTOME_SMTP_OPENSSL_VERIFY_MODE   none or peer (see ruby Mail library). Defaults to peer.
 
 TALKTOME_BEARER_SECRET              secret for the webapi, to let send emails to anyone
+
+RACK_KEY_SPACE_LIMIT                configures the max key space limit for the rack query parser
 ```
 
 ## Hacking Talktome

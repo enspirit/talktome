@@ -1,3 +1,7 @@
+## 2.3.1 - 2024-06-13
+
+* Rack parser's max key space limit is now configurable through the RACK_KEY_SPACE_LIMIT env variable
+
 ## 2.3.0 - 2024-06-06
 
 * Sinatra >= 3.2 must be used.
