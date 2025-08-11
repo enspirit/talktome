@@ -105,6 +105,7 @@ TALKTOME_SMTP_DOMAIN                sending domain
 TALKTOME_SMTP_USER                  user for smtp authentication
 TALKTOME_SMTP_PASSWORD              password for smtp authentication
 TALKTOME_SMTP_AUTHENTICATION        smtp authentication method (plain, login, cram-md5, ...)
+TALKTOME_SMTP_TLS                   enable tls
 TALKTOME_SMTP_STARTTLS_AUTO         true or false (see ruby Mail library)
 TALKTOME_SMTP_OPENSSL_VERIFY_MODE   none or peer (see ruby Mail library). Defaults to peer.
 

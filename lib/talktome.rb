@@ -52,6 +52,12 @@ module Talktome
     email_delivery = (ENV['TALKTOME_EMAIL_DELIVERY'] || "test").to_sym
     email_config   = {}
 
+    tls = case ENV["TALKTOME_SMTP_TLS"]&.downcase
+      when nil       then nil
+      when "false"   then false
+      else true
+    end
+
     email_config.merge!({
       address:              ENV['TALKTOME_SMTP_ADDRESS'],
       port:                 ENV['TALKTOME_SMTP_PORT'].to_i,
@@ -59,8 +65,9 @@ module Talktome
       user_name:            ENV['TALKTOME_SMTP_USER'],
       password:             ENV['TALKTOME_SMTP_PASSWORD'],
       auhentication:        ENV['TALKTOME_SMTP_AUTHENTICATION'],
+      tls:                  tls,
       enable_starttls_auto: (ENV['TALKTOME_SMTP_STARTTLS_AUTO'] != 'false'),
-      openssl_verify_mode: ENV['TALKTOME_SMTP_OPENSSL_VERIFY_MODE'] || "peer",
+      openssl_verify_mode:  ENV['TALKTOME_SMTP_OPENSSL_VERIFY_MODE'] || "peer",
     }) if email_delivery == :smtp
 
     email_config.merge!({
