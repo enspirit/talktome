@@ -64,7 +64,7 @@ module Talktome
       domain:               ENV['TALKTOME_SMTP_DOMAIN'],
       user_name:            ENV['TALKTOME_SMTP_USER'],
       password:             ENV['TALKTOME_SMTP_PASSWORD'],
-      auhentication:        ENV['TALKTOME_SMTP_AUTHENTICATION'],
+      authentication:       ENV['TALKTOME_SMTP_AUTHENTICATION'],
       tls:                  tls,
       enable_starttls_auto: (ENV['TALKTOME_SMTP_STARTTLS_AUTO'] != 'false'),
       openssl_verify_mode:  ENV['TALKTOME_SMTP_OPENSSL_VERIFY_MODE'] || "peer",
