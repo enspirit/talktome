@@ -15,6 +15,8 @@ module Talktome
         # Override environment defaults with template behavior, for flexibility
         [
           :to,
+          :cc,
+          :bcc,
           :reply_to,
           :in_reply_to,
           :attachments,

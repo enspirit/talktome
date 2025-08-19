@@ -30,7 +30,9 @@ module Talktome
       }
       Email = String(s | s =~ /^[^@]+@[^@]+$/ )
       Base = {
-        to          :? Email
+        to          :? Email|[Email]
+        cc          :? Email|[Email]
+        bcc         :? Email|[Email]
         reply_to    :? Email
         in_reply_to :? String
         attachments :? {
@@ -48,7 +50,10 @@ module Talktome
         footer   = Talktome.env('TALKTOME_EMAIL_FOOTER', "Truly yours,\n
           Sent by [Enspirit.be](https://enspirit.be/), contact us if you need help with any IT task.")
         user     = load_user_from_info!
+
         settings.talktome.talktome(action, user, info.merge(allvars: as_array, subject: subject, footer: footer), [:email]){|email|
+          email.cc = info[:cc] if info.has_key?(:cc)
+          email.bcc = info[:bcc] if info.has_key?(:bcc)
           email.reply_to = info[:reply_to] if info.has_key?(:reply_to)
           email.in_reply_to = info[:in_reply_to] if info.has_key?(:in_reply_to)
           (info[:attachments] || {}).each do |name, att|
@@ -76,7 +81,7 @@ module Talktome
     end
 
     def load_user_from_info!
-      protected_fields = [:to, :in_reply_to, :attachments]
+      protected_fields = [:to, :cc, :bcc, :in_reply_to, :attachments]
       if (info.keys & protected_fields).any?
         secret = Talktome.env('TALKTOME_BEARER_SECRET')
         fail!("Missing secret", 400) unless secret
