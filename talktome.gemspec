@@ -26,4 +26,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'finitio', '>= 0.12.0', '< 0.13.0'
   s.add_runtime_dependency 'rack-robustness', '~> 1.1'
   s.add_runtime_dependency 'puma', '>= 5.5'
+  s.add_runtime_dependency 'net-imap', '< 5'
 end
